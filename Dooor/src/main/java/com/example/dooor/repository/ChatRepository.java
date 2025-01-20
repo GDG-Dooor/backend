@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Integer> {
-    List<Chat> findByUserId(Integer userId); // 사용자 ID로 채팅 목록 검색
+    List<Chat> findByUser_UserId(Integer userId); // 사용자 ID로 채팅 목록 검색
+
 }

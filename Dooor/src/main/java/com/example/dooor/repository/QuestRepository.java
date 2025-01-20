@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface QuestRepository extends JpaRepository<Quest, Integer> {
-    List<Quest> findByUserId(Integer userId); // 사용자 ID로 퀘스트 목록 검색
+    List<Quest> findByUser_UserId(Integer userId); // 사용자 ID로 퀘스트 목록 검색
     List<Quest> findByStatus(String status); // 상태로 퀘스트 검색
 }

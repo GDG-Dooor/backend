@@ -15,7 +15,7 @@ public class User {
     @Column(name = "nickname", nullable = false, length = 50)
     private String nickname; // 닉네임
 
-    @Column(name = "email", nullable = false, unique = true, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email; // 이메일 주소
 
     @Column(name = "password", nullable = false, length = 255)
@@ -25,19 +25,19 @@ public class User {
     private String phoneNumber; // 전화번호
 
     @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt; // 가입 날짜
+    private LocalDateTime createdAt = LocalDateTime.now(); // 가입 날짜
 
-    @Column(name = "rank", columnDefinition = "INT DEFAULT 0")
-    private Integer rank; // 랭킹 점수
+    @Column(name = "`rank`", columnDefinition = "INT DEFAULT 0")
+    private Integer rank = 0; // 랭킹 점수
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "current_grade_id")
     private Grade currentGrade; // 현재 등급 (Grade와의 관계)
 
-    @Column(name = "google_id", unique = true, length = 255)
+    @Column(name = "google_id", unique = true, length = 255, nullable = true)
     private String googleId; // 구글 계정 ID
 
-    @Column(name = "provider", length = 50)
+    @Column(name = "provider", length = 50, nullable = true)
     private String provider; // 인증 제공자 (예: "google")
 
     // 기본 생성자
@@ -51,13 +51,13 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
         this.rank = rank != null ? rank : 0;
-        this.googleId = googleId; // 구글 ID 초기화
-        this.provider = provider; // 인증 제공자 초기화
+        this.googleId = googleId;
+        this.provider = provider;
     }
 
     // 사용자 ID를 설정할 수 있는 생성자 추가
     public User(Integer userId) {
-        this.userId = userId; // 사용자 ID 설정
+        this.userId = userId;
     }
 
     // Getter 및 Setter

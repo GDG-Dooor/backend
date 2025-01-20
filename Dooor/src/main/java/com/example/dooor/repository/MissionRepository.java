@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
-    List<Mission> findByStageId(Integer stageId); // 단계 ID로 미션 목록 검색
+    List<Mission> findByStage_StageId(Integer stageId); // 단계 ID로 미션 목록 검색
 }

@@ -27,13 +27,13 @@ public class RankingService {
 
     // 사용자 개인 랭킹 조회
     public Optional<Ranking> getUserRanking(Integer userId) {
-        List<Ranking> rankings = rankingRepository.findByUserId(userId);
+        List<Ranking> rankings = rankingRepository.findByUser_UserId(userId);
         return rankings.isEmpty() ? Optional.empty() : Optional.of(rankings.get(0)); // 첫 번째 랭킹 반환
     }
 
     // 랭킹 점수 업데이트
     public boolean updateRankingScore(Integer userId, Integer newScore) {
-        List<Ranking> rankings = rankingRepository.findByUserId(userId);
+        List<Ranking> rankings = rankingRepository.findByUser_UserId(userId);
         if (!rankings.isEmpty()) {
             Ranking ranking = rankings.get(0);
             ranking.setScore(newScore); // 새로운 점수 설정

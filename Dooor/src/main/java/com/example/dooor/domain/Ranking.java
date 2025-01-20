@@ -18,7 +18,7 @@ public class Ranking {
     @Column(name = "score", columnDefinition = "INT DEFAULT 0")
     private Integer score; // 사용자 점수
 
-    @Column(name = "rank")
+    @Column(name = "`rank`")
     private Integer rank; // 사용자 랭킹
 
     @Column(name = "updated_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
