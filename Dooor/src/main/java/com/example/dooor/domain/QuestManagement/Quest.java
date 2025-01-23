@@ -2,10 +2,16 @@ package com.example.dooor.domain.QuestManagement;
 
 import com.example.dooor.domain.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity
-@Table(name = "Quest")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Quest {
 
     @Id
@@ -31,9 +37,6 @@ public class Quest {
     @OneToMany(mappedBy = "quest")
     private List<Stage> stages; // 해당 퀘스트의 단계들
 
-    // 기본 생성자
-    public Quest() {}
-
     // 생성자
     public Quest(User user, String title, String description, Integer currentStage, String status) {
         this.user = user;
@@ -41,62 +44,5 @@ public class Quest {
         this.description = description;
         this.currentStage = currentStage != null ? currentStage : 1;
         this.status = status != null ? status : "진행 중";
-    }
-
-    // Getter 및 Setter
-    public Integer getQuestId() {
-        return questId;
-    }
-
-    public void setQuestId(Integer questId) {
-        this.questId = questId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getCurrentStage() {
-        return currentStage;
-    }
-
-    public void setCurrentStage(Integer currentStage) {
-        this.currentStage = currentStage;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public List<Stage> getStages() {
-        return stages;
-    }
-
-    public void setStages(List<Stage> stages) {
-        this.stages = stages;
     }
 }

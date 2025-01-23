@@ -7,20 +7,18 @@ import com.example.dooor.domain.User;
 import com.example.dooor.dto.Quest.QuestDTO;
 import com.example.dooor.repository.QuestRepository;
 import com.example.dooor.repository.UserQuestRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class QuestService {
 
-    @Autowired
-    private QuestRepository questRepository;
-
-    @Autowired
-    private UserQuestRepository userQuestRepository; // UserQuestRepository 추가
+    private final QuestRepository questRepository;
+    private final UserQuestRepository userQuestRepository; // UserQuestRepository 추가
 
     // 퀘스트 목록 조회
     public List<Quest> getAllQuests() {

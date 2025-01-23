@@ -2,10 +2,16 @@ package com.example.dooor.domain.QuestManagement;
 
 import com.example.dooor.domain.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity
-@Table(name = "Grade")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Grade {
 
     @Id
@@ -24,54 +30,10 @@ public class Grade {
     @OneToMany(mappedBy = "currentGrade")
     private List<User> users; // 해당 등급을 가진 사용자들
 
-    // 기본 생성자
-    public Grade() {}
-
     // 생성자
     public Grade(String gradeName, Integer requiredStage, String description) {
         this.gradeName = gradeName;
         this.requiredStage = requiredStage;
         this.description = description;
-    }
-
-    // Getter 및 Setter
-    public Integer getGradeId() {
-        return gradeId;
-    }
-
-    public void setGradeId(Integer gradeId) {
-        this.gradeId = gradeId;
-    }
-
-    public String getGradeName() {
-        return gradeName;
-    }
-
-    public void setGradeName(String gradeName) {
-        this.gradeName = gradeName;
-    }
-
-    public Integer getRequiredStage() {
-        return requiredStage;
-    }
-
-    public void setRequiredStage(Integer requiredStage) {
-        this.requiredStage = requiredStage;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }

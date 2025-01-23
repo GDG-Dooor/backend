@@ -1,10 +1,16 @@
 package com.example.dooor.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Chat")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Chat {
 
     @Id
@@ -21,47 +27,11 @@ public class Chat {
     @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt; // 메시지 생성 시간
 
-    // 기본 생성자
-    public Chat() {}
-
     // 생성자
     public Chat(User user, String message) {
         this.user = user;
         this.message = message;
         this.createdAt = LocalDateTime.now();
-    }
-
-    // Getter 및 Setter
-    public Integer getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Integer chatId) {
-        this.chatId = chatId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
 

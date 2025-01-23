@@ -3,7 +3,7 @@ package com.example.dooor.controller;
 import com.example.dooor.domain.User;
 import com.example.dooor.dto.User.UserDTO;
 import com.example.dooor.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     // 회원가입
     @PostMapping("/signup")

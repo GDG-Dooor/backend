@@ -1,10 +1,9 @@
 package com.example.dooor.service;
 
 import com.example.dooor.domain.Ranking;
-import com.example.dooor.domain.User;
 import com.example.dooor.repository.RankingRepository;
 import com.example.dooor.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,13 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RankingService {
 
-    @Autowired
-    private RankingRepository rankingRepository;
-
-    @Autowired
-    private UserRepository userRepository; // 사용자 정보를 조회하기 위한 UserRepository
+    private final RankingRepository rankingRepository;
+    private final UserRepository userRepository; // 사용자 정보를 조회하기 위한 UserRepository
 
     // 전체 랭킹 조회
     public List<Ranking> getAllRankings() {

@@ -5,19 +5,17 @@ import com.example.dooor.domain.User;
 import com.example.dooor.dto.Chat.ChatRequestDTO;
 import com.example.dooor.repository.ChatRepository;
 import com.example.dooor.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ChatService {
 
-    @Autowired
-    private ChatRepository chatRepository;
-
-    @Autowired
-    private UserRepository userRepository; // 사용자 정보를 조회하기 위한 UserRepository
+    private final ChatRepository chatRepository;
+    private final UserRepository userRepository; // 사용자 정보를 조회하기 위한 UserRepository
 
     // 챗봇과 채팅
     public Chat sendMessage(ChatRequestDTO chatRequestDTO) {
