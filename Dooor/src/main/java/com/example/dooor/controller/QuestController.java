@@ -4,7 +4,7 @@ import com.example.dooor.domain.QuestManagement.Quest;
 import com.example.dooor.domain.QuestManagement.UserQuest;
 import com.example.dooor.dto.Quest.QuestDTO;
 import com.example.dooor.service.QuestService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/quests")
+@RequiredArgsConstructor
 public class QuestController {
 
-    @Autowired
-    private QuestService questService;
+    private final QuestService questService;
 
     // 퀘스트 목록 조회
     @GetMapping

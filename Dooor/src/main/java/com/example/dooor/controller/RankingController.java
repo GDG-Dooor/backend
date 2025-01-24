@@ -2,7 +2,7 @@ package com.example.dooor.controller;
 
 import com.example.dooor.domain.Ranking;
 import com.example.dooor.service.RankingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ranking")
+@RequiredArgsConstructor
 public class RankingController {
 
-    @Autowired
-    private RankingService rankingService;
+    private final RankingService rankingService;
 
     // 전체 랭킹 조회
     @GetMapping("/all")
