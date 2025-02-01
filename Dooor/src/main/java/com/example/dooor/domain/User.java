@@ -33,6 +33,9 @@ public class User {
     @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now(); // 가입 날짜
 
+    @Column(name = "role", nullable = false)
+    private Role role;
+
     @Column(name = "`rank`", columnDefinition = "INT DEFAULT 0")
     private Integer rank = 0; // 랭킹 점수
 

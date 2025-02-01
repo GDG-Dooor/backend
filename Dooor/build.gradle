@@ -31,7 +31,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security' // Spring Security
 	implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Web
 	compileOnly 'org.projectlombok:lombok' // Lombok
-	developmentOnly 'org.springframework.boot:spring-boot-devtools' // DevTools
 	runtimeOnly 'com.mysql:mysql-connector-j' // MySQL Connector
 	annotationProcessor 'org.projectlombok:lombok' // Lombok Annotation Processor
 	testImplementation 'org.springframework.boot:spring-boot-starter-test' // Test Starter
@@ -39,6 +38,9 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform Launcher
 	implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
 	implementation 'org.hibernate.validator:hibernate-validator:7.0.0.Final'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 }
 
 
