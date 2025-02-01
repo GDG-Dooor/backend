@@ -14,7 +14,7 @@ public class UserDTO {
 
     @NotBlank
     @Size(max = 50)
-    private String nickname; // 닉네임
+    private String name; // 이름
 
     @NotBlank
     @Email
@@ -25,9 +25,9 @@ public class UserDTO {
     @Size(min = 8, max = 255)
     private String password; // 비밀번호
 
-    private String phoneNumber; // 전화번호
+    private String gender; // 성별(남성 or 여성)
 
-    private String googleId; // 구글 계정 ID (구글 로그인 시 사용)
+    // private String googleId; // 구글 계정 ID (구글 로그인 시 사용)
 
-    private String provider; // 인증 제공자 (예: "google")
+    // private String provider; // 인증 제공자 (예: "google")
 }
