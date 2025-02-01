@@ -1,5 +1,6 @@
 package com.example.dooor.service;
 
+import com.example.dooor.domain.Role;
 import com.example.dooor.domain.User;
 import com.example.dooor.dto.User.UserDTO;
 import com.example.dooor.repository.UserRepository;
@@ -19,10 +20,11 @@ public class UserService {
     // 회원가입
     public User signup(UserDTO userDTO) {
         User user = new User();
-        user.setNickname(userDTO.getNickname());
+        user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
-        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setRole(Role.USER);
+        user.setGender(userDTO.getGender());
         return userRepository.save(user);
     }
 
@@ -57,11 +59,6 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    // 휴대폰 번호 중복 체크
-    public boolean checkPhoneNumberExists(String phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber).isPresent();
-    }
-
     // 사용자 퀘스트 진행 상태 조회
     public String getUserProgress(Integer userId) {
         // 여기에 사용자 퀘스트 진행 상태를 조회하는 로직 추가
@@ -85,11 +82,11 @@ public class UserService {
     }
 
     // 닉네임 변경
-    public boolean updateNickname(Integer userId, String newNickname) {
+    public boolean updateNickname(Integer userId, String newName) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.setNickname(newNickname); // 닉네임 변경
+            user.setName(newName); // 닉네임 변경
             userRepository.save(user);
             return true; // 닉네임 변경 성공
         }

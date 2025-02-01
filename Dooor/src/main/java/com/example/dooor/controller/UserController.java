@@ -54,13 +54,6 @@ public class UserController {
         return ResponseEntity.ok(exists); // 중복 여부 반환
     }
 
-    // 휴대폰 번호 중복 체크
-    @GetMapping("/phonenumber")
-    public ResponseEntity<Boolean> checkPhoneNumberExists(@RequestParam String phoneNumber) {
-        boolean exists = userService.checkPhoneNumberExists(phoneNumber);
-        return ResponseEntity.ok(exists); // 중복 여부 반환
-    }
-
     // 사용자 퀘스트 진행 상태 조회
     @GetMapping("/progress")
     public ResponseEntity<String> getUserProgress(@RequestParam Integer userId) {
