@@ -2,10 +2,8 @@ package com.example.dooor.dto.User;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 //로그인 후 응답 정보를 포함하며, 사용자 ID와 인증 토큰 등을 전송
 public class LoginResponseDTO {

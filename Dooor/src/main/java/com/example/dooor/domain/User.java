@@ -2,15 +2,14 @@ package com.example.dooor.domain;
 
 import com.example.dooor.domain.QuestManagement.Grade;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class User {
 
@@ -52,6 +51,7 @@ public class User {
 //    private String provider; // 인증 제공자 (예: "google")
 
     // 생성자
+    @Builder
     public User(String name, String email, String password, LocalDateTime createdAt, Integer rank, String gender, Role role) {
         this.name = name;
         this.email = email;
@@ -65,5 +65,12 @@ public class User {
     // 사용자 ID를 설정할 수 있는 생성자 추가
     public User(Integer userId) {
         this.userId = userId;
+    }
+
+    public void changePassword(String newPassword){
+        this.password = newPassword;
+    }
+    public void changeName(String name) {
+        this.name = name;
     }
 }

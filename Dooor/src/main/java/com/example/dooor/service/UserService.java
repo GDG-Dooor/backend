@@ -2,7 +2,8 @@ package com.example.dooor.service;
 
 import com.example.dooor.domain.Role;
 import com.example.dooor.domain.User;
-import com.example.dooor.dto.User.UserDTO;
+import com.example.dooor.dto.User.UserSignUpDTO;
+import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,21 +19,40 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder; // 비밀번호 암호화를 위한 BCryptPasswordEncoder
 
     // 회원가입
-    public User signup(UserDTO userDTO) {
-        User user = new User();
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
-        user.setRole(Role.USER);
-        user.setGender(userDTO.getGender());
-        return userRepository.save(user);
+    public UserProfileDTO signup(UserSignUpDTO userSignUpDTO) {
+        if(userRepository.findByEmail(userSignUpDTO.getEmail()).isPresent()) {
+            throw new RuntimeException("이미 존재하는 이메일입니다.");
+        }
+        User user = User.builder()
+                .name(userSignUpDTO.getName())
+                .email(userSignUpDTO.getEmail())
+                .password(passwordEncoder.encode(userSignUpDTO.getPassword()))
+                .role(Role.USER)
+                .gender(userSignUpDTO.getGender())
+                .build();
+        userRepository.save(user);
+
+        return UserProfileDTO.builder()
+                .name(userSignUpDTO.getName())
+                .email(userSignUpDTO.getEmail())
+                .gender(userSignUpDTO.getGender())
+                .rank(user.getRank())
+                .build();
     }
 
     // 로그인
-    public Optional<User> login(String email, String password) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-            return user; // 로그인 성공
+    public Optional<UserProfileDTO> login(String email, String password) {
+        Optional<User> userOptional = userRepository.findByEmail(email)
+                .filter(u -> passwordEncoder.matches(password, u.getPassword()));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            UserProfileDTO userProfileDTO = UserProfileDTO.builder()
+                    .name(user.getName())
+                    .email(user.getEmail())
+                    .gender(user.getGender())
+                    .rank(user.getRank())
+                    .build();
+            return Optional.of(userProfileDTO);
         }
         return Optional.empty(); // 로그인 실패
     }
@@ -47,7 +67,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.setPassword(passwordEncoder.encode(newPassword)); // 비밀번호 암호화
+            user.changePassword(passwordEncoder.encode(newPassword)); // 비밀번호 암호화
             userRepository.save(user);
             return true; // 비밀번호 변경 성공
         }
@@ -60,10 +80,10 @@ public class UserService {
     }
 
     // 사용자 퀘스트 진행 상태 조회
-    public String getUserProgress(Integer userId) {
-        // 여기에 사용자 퀘스트 진행 상태를 조회하는 로직 추가
-        return "사용자 퀘스트 진행 상태"; // 예시 응답
-    }
+//    public String getUserProgress(Integer userId) {
+//        // 여기에 사용자 퀘스트 진행 상태를 조회하는 로직 추가
+//        return "사용자 퀘스트 진행 상태"; // 예시 응답
+//    }
 
     // 로그아웃 처리 (세션 무효화 등 처리 필요)
     public void logout() {
@@ -82,13 +102,13 @@ public class UserService {
     }
 
     // 닉네임 변경
-    public boolean updateNickname(Integer userId, String newName) {
+    public boolean updateName(Integer userId, String newName) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.setName(newName); // 닉네임 변경
+            user.changeName(newName);
             userRepository.save(user);
-            return true; // 닉네임 변경 성공
+            return true; // 이름 변경 성공
         }
         return false; // 사용자 없음
     }
