@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserSignUpDTO {
+public class UserDTO {
 
     @NotBlank
     @Size(max = 50)

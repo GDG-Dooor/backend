@@ -1,7 +1,7 @@
 package com.example.dooor.controller;
 
 import com.example.dooor.domain.User;
-import com.example.dooor.dto.User.UserSignUpDTO;
+import com.example.dooor.dto.User.UserDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<UserProfileDTO> signup(@RequestBody UserSignUpDTO userSignUpDTO) {
-        UserProfileDTO user = userService.signup(userSignUpDTO);
+    public ResponseEntity<UserProfileDTO> signup(@RequestBody UserDTO userDTO) {
+        UserProfileDTO user = userService.signup(userDTO);
         return ResponseEntity.ok(user); // 사용자 정보 반환
     }
 

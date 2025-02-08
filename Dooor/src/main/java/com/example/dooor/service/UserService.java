@@ -2,7 +2,7 @@ package com.example.dooor.service;
 
 import com.example.dooor.domain.Role;
 import com.example.dooor.domain.User;
-import com.example.dooor.dto.User.UserSignUpDTO;
+import com.example.dooor.dto.User.UserDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,23 +19,23 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder; // 비밀번호 암호화를 위한 BCryptPasswordEncoder
 
     // 회원가입
-    public UserProfileDTO signup(UserSignUpDTO userSignUpDTO) {
-        if(userRepository.findByEmail(userSignUpDTO.getEmail()).isPresent()) {
+    public UserProfileDTO signup(UserDTO userDTO) {
+        if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
         User user = User.builder()
-                .name(userSignUpDTO.getName())
-                .email(userSignUpDTO.getEmail())
-                .password(passwordEncoder.encode(userSignUpDTO.getPassword()))
+                .name(userDTO.getName())
+                .email(userDTO.getEmail())
+                .password(passwordEncoder.encode(userDTO.getPassword()))
                 .role(Role.USER)
-                .gender(userSignUpDTO.getGender())
+                .gender(userDTO.getGender())
                 .build();
         userRepository.save(user);
 
         return UserProfileDTO.builder()
-                .name(userSignUpDTO.getName())
-                .email(userSignUpDTO.getEmail())
-                .gender(userSignUpDTO.getGender())
+                .name(userDTO.getName())
+                .email(userDTO.getEmail())
+                .gender(userDTO.getGender())
                 .rank(user.getRank())
                 .build();
     }
