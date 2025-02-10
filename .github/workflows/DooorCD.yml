@@ -8,7 +8,7 @@ on:
 
 #테스트 결과 작성을 위해 쓰기권한 추가
 permissions: 
-content: write
+  contents: write
 #jdk 세팅
 #gradle 캐싱
 #test를 제외한 프로젝트 빌드
