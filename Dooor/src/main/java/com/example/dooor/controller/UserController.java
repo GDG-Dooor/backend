@@ -91,9 +91,15 @@ public class UserController {
 
     // 닉네임 변경
     @PatchMapping("/name")
-    public ResponseEntity<Void> updateName(@RequestParam Integer userId, @RequestParam String newName) {
-        boolean updated = userService.updateName(userId, newName);
-        return updated ? ResponseEntity.ok().build() // 이름 변경 성공
-                : ResponseEntity.notFound().build(); // 사용자 없음
+    public ResponseEntity<String> updateName(@RequestParam Integer userId, @RequestParam String newName, Principal principal) {
+        Integer updated = userService.updateName(userId, newName, principal);
+        if (updated == 0) return ResponseEntity.ok().build();
+        else if (updated == 1) return ResponseEntity.status(403)
+                .body("현재 사용중인 이름입니다.");
+        else if (updated == 2) return ResponseEntity.status(403)
+                .body("변경할 수 있는 권한이 없습니다.");
+        else return ResponseEntity.notFound().build();
+//        return updated ? ResponseEntity.ok().build() // 이름 변경 성공
+//                : ResponseEntity.notFound().build(); // 사용자 없음
     }
 }
