@@ -6,9 +6,13 @@ import com.example.dooor.dto.User.UserDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -76,10 +80,16 @@ public class UserController {
 
     // 비밀번호 변경
     @PostMapping("/password")
-    public ResponseEntity<Void> changePassword(@RequestParam Integer userId, @RequestParam String newPassword) {
-        boolean changed = userService.changePassword(userId, newPassword);
-        return changed ? ResponseEntity.ok().build() // 비밀번호 변경 성공
-                : ResponseEntity.notFound().build(); // 사용자 없음
+    public ResponseEntity<String> changePassword(@RequestParam Integer userId, @RequestParam String newPassword, Principal principal) {
+        Integer changed = userService.changePassword(userId, newPassword, principal);
+        if (changed == 0) return ResponseEntity.ok().build();
+        else if (changed == 1) return ResponseEntity.status(403)
+                .body("현재 사용중인 비밀번호입니다.");
+        else if (changed == 2) return ResponseEntity.status(403)
+                .body("변경할 수 있는 권한이 없습니다.");
+        else return ResponseEntity.notFound().build(); // changed == 3
+//        return changed ? ResponseEntity.ok().build() // 비밀번호 변경 성공
+//                : ResponseEntity.notFound().build(); // 사용자 없음
     }
 
     // 닉네임 변경
