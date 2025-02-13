@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,15 +65,24 @@ public class UserService {
     }
 
     // 비밀번호 변경
-    public boolean changePassword(Integer userId, String newPassword) {
+    public Integer changePassword(Integer userId, String newPassword, Principal principal) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
+        Integer tokenUserId = Integer.parseInt(principal.getName()); // 토큰으로 접근한 유저 확인
+        Optional<User> tokenUserOptional = userRepository.findById(tokenUserId);
+        if (userOptional.isPresent() && tokenUserOptional.isPresent()) {
             User user = userOptional.get();
+            User tokenUser = tokenUserOptional.get();
+            if (passwordEncoder.matches(newPassword, user.getPassword())) {
+                return 1; // 비밀번호 일치로 변경 불가
+            }
+            if (!Objects.equals(user.getUserId(), tokenUser.getUserId())) {
+                return 2; // 토큰과 사용자 불일치로 변경 불가
+            }
             user.changePassword(passwordEncoder.encode(newPassword)); // 비밀번호 암호화
             userRepository.save(user);
-            return true; // 비밀번호 변경 성공
+            return 0; // 비밀번호 변경 성공
         }
-        return false; // 사용자 없음
+        return 3; // 사용자 없음
     }
 
     // 아이디 중복 체크
@@ -92,24 +103,40 @@ public class UserService {
     }
 
     // 탈퇴하기
-    public boolean deleteUser(Integer userId) {
+    public Integer deleteUser(Integer userId, Principal principal) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            userRepository.delete(userOptional.get());
-            return true; // 탈퇴 성공
+        Integer tokenUserId = Integer.parseInt(principal.getName()); // 토큰으로 접근한 유저 확인
+        Optional<User> tokenUserOptional = userRepository.findById(tokenUserId);
+        if (userOptional.isPresent() && tokenUserOptional.isPresent()) {
+            User user = userOptional.get();
+            User tokenUser = tokenUserOptional.get();
+            if (!Objects.equals(user.getUserId(), tokenUser.getUserId())) {
+                return 1; // 토큰과 사용자 불일치로 변경 불가
+            }
+            userRepository.delete(user);
+            return 0; // 탈퇴 성공
         }
-        return false; // 사용자 없음
+        return 2; // 사용자 없음
     }
 
     // 닉네임 변경
-    public boolean updateName(Integer userId, String newName) {
+    public Integer updateName(Integer userId, String newName, Principal principal) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
+        Integer tokenUserId = Integer.parseInt(principal.getName()); // 토큰으로 접근한 유저 확인
+        Optional<User> tokenUserOptional = userRepository.findById(tokenUserId);
+        if (userOptional.isPresent() && tokenUserOptional.isPresent()) {
             User user = userOptional.get();
+            User tokenUser = tokenUserOptional.get();
+            if (user.getName().equals(newName)) {
+                return 1; // 이름 일치로 변경 불가
+            }
+            if (!Objects.equals(user.getUserId(), tokenUser.getUserId())) {
+                return 2; // 토큰과 사용자 불일치로 변경 불가
+            }
             user.changeName(newName);
             userRepository.save(user);
-            return true; // 이름 변경 성공
+            return 0; // 이름 변경 성공
         }
-        return false; // 사용자 없음
+        return 3; // 사용자 없음
     }
 }

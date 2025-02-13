@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -68,25 +69,41 @@ public class UserController {
 
     // 탈퇴하기
     @DeleteMapping
-    public ResponseEntity<Void> deleteUser(@RequestParam Integer userId) {
-        boolean deleted = userService.deleteUser(userId);
-        return deleted ? ResponseEntity.ok().build() // 탈퇴 성공
-                : ResponseEntity.notFound().build(); // 사용자 없음
+    public ResponseEntity<String> deleteUser(@RequestParam Integer userId, Principal principal) {
+        Integer deleted = userService.deleteUser(userId, principal);
+        if (deleted == 0) return ResponseEntity.ok().build();
+        else if (deleted == 1) return ResponseEntity.status(403)
+                .body("탈퇴할 수 있는 권한이 없습니다.");
+        else return ResponseEntity.notFound().build(    );
+//        return deleted ? ResponseEntity.ok().build() // 탈퇴 성공
+//                : ResponseEntity.notFound().build(); // 사용자 없음
     }
 
     // 비밀번호 변경
     @PostMapping("/password")
-    public ResponseEntity<Void> changePassword(@RequestParam Integer userId, @RequestParam String newPassword) {
-        boolean changed = userService.changePassword(userId, newPassword);
-        return changed ? ResponseEntity.ok().build() // 비밀번호 변경 성공
-                : ResponseEntity.notFound().build(); // 사용자 없음
+    public ResponseEntity<String> changePassword(@RequestParam Integer userId, @RequestParam String newPassword, Principal principal) {
+        Integer changed = userService.changePassword(userId, newPassword, principal);
+        if (changed == 0) return ResponseEntity.ok().build();
+        else if (changed == 1) return ResponseEntity.status(403)
+                .body("현재 사용중인 비밀번호입니다.");
+        else if (changed == 2) return ResponseEntity.status(403)
+                .body("변경할 수 있는 권한이 없습니다.");
+        else return ResponseEntity.notFound().build();
+//        return changed ? ResponseEntity.ok().build() // 비밀번호 변경 성공
+//                : ResponseEntity.notFound().build(); // 사용자 없음
     }
 
     // 닉네임 변경
     @PatchMapping("/name")
-    public ResponseEntity<Void> updateName(@RequestParam Integer userId, @RequestParam String newName) {
-        boolean updated = userService.updateName(userId, newName);
-        return updated ? ResponseEntity.ok().build() // 이름 변경 성공
-                : ResponseEntity.notFound().build(); // 사용자 없음
+    public ResponseEntity<String> updateName(@RequestParam Integer userId, @RequestParam String newName, Principal principal) {
+        Integer updated = userService.updateName(userId, newName, principal);
+        if (updated == 0) return ResponseEntity.ok().build();
+        else if (updated == 1) return ResponseEntity.status(403)
+                .body("현재 사용중인 이름입니다.");
+        else if (updated == 2) return ResponseEntity.status(403)
+                .body("변경할 수 있는 권한이 없습니다.");
+        else return ResponseEntity.notFound().build();
+//        return updated ? ResponseEntity.ok().build() // 이름 변경 성공
+//                : ResponseEntity.notFound().build(); // 사용자 없음
     }
 }
