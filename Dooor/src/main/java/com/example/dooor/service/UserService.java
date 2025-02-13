@@ -2,8 +2,10 @@ package com.example.dooor.service;
 
 import com.example.dooor.domain.Role;
 import com.example.dooor.domain.User;
+import com.example.dooor.dto.TokenDTO;
 import com.example.dooor.dto.User.UserDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
+import com.example.dooor.jwt.TokenProvider;
 import com.example.dooor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder; // 비밀번호 암호화를 위한 BCryptPasswordEncoder
+    private final TokenProvider tokenProvider;
 
     // 회원가입
     public UserProfileDTO signup(UserDTO userDTO) {
@@ -41,20 +44,17 @@ public class UserService {
     }
 
     // 로그인
-    public Optional<UserProfileDTO> login(String email, String password) {
+    public TokenDTO login(String email, String password) { // 수정한 부분: 반환 타입을 TokenDTO로 변경
         Optional<User> userOptional = userRepository.findByEmail(email)
                 .filter(u -> passwordEncoder.matches(password, u.getPassword()));
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            UserProfileDTO userProfileDTO = UserProfileDTO.builder()
-                    .name(user.getName())
-                    .email(user.getEmail())
-                    .gender(user.getGender())
-                    .rank(user.getRank())
-                    .build();
-            return Optional.of(userProfileDTO);
+            String accessToken = tokenProvider.createAccessToken(user); // 수정한 부분: 토큰 생성
+            return TokenDTO.builder()
+                    .accessToken(accessToken)
+                    .build(); // 수정한 부분: TokenDTO 반환
         }
-        return Optional.empty(); // 로그인 실패
+        throw new RuntimeException("로그인 실패: 이메일 또는 비밀번호가 잘못되었습니다."); // 수정한 부분: 예외 처리
     }
 
     // 아이디 반환

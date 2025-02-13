@@ -1,6 +1,7 @@
 package com.example.dooor.controller;
 
 import com.example.dooor.domain.User;
+import com.example.dooor.dto.TokenDTO;
 import com.example.dooor.dto.User.UserDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.service.UserService;
@@ -25,11 +26,15 @@ public class UserController {
     }
 
     // 로그인
+    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<UserProfileDTO> login(@RequestParam String email, @RequestParam String password) {
-        Optional<UserProfileDTO> user = userService.login(email, password);
-        return user.map(ResponseEntity::ok) // 로그인 성공 시 사용자 정보 반환
-                .orElseGet(() -> ResponseEntity.badRequest().build()); // 로그인 실패 시 400 반환
+    public ResponseEntity<TokenDTO> login(@RequestParam String email, @RequestParam String password) { // 수정한 부분: 반환 타입을 ResponseEntity<TokenDTO>로 변경
+        try {
+            TokenDTO token = userService.login(email, password); // 수정한 부분: TokenDTO 반환받기
+            return ResponseEntity.ok(token); // 로그인 성공 시 토큰 반환
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null); // 로그인 실패 시 400 반환
+        }
     }
 
     // 아이디 반환
