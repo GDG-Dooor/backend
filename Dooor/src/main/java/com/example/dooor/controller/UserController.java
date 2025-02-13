@@ -69,10 +69,14 @@ public class UserController {
 
     // 탈퇴하기
     @DeleteMapping
-    public ResponseEntity<Void> deleteUser(@RequestParam Integer userId) {
-        boolean deleted = userService.deleteUser(userId);
-        return deleted ? ResponseEntity.ok().build() // 탈퇴 성공
-                : ResponseEntity.notFound().build(); // 사용자 없음
+    public ResponseEntity<String> deleteUser(@RequestParam Integer userId, Principal principal) {
+        Integer deleted = userService.deleteUser(userId, principal);
+        if (deleted == 0) return ResponseEntity.ok().build();
+        else if (deleted == 1) return ResponseEntity.status(403)
+                .body("탈퇴할 수 있는 권한이 없습니다.");
+        else return ResponseEntity.notFound().build(    );
+//        return deleted ? ResponseEntity.ok().build() // 탈퇴 성공
+//                : ResponseEntity.notFound().build(); // 사용자 없음
     }
 
     // 비밀번호 변경
@@ -84,7 +88,7 @@ public class UserController {
                 .body("현재 사용중인 비밀번호입니다.");
         else if (changed == 2) return ResponseEntity.status(403)
                 .body("변경할 수 있는 권한이 없습니다.");
-        else return ResponseEntity.notFound().build(); // changed == 3
+        else return ResponseEntity.notFound().build();
 //        return changed ? ResponseEntity.ok().build() // 비밀번호 변경 성공
 //                : ResponseEntity.notFound().build(); // 사용자 없음
     }
