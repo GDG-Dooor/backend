@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserDTO {
+public class UserSignUpDTO {
 
     @NotBlank
     @Size(max = 50)
     private String name; // 이름
 
     @NotBlank
-    @Email
+    @Email(message = "이메일 양식에 맞지 않습니다.")
     @Size(max = 100)
     private String email; // 이메일 주소
 

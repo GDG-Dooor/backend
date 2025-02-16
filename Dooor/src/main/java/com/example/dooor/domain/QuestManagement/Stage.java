@@ -1,34 +1,26 @@
 package com.example.dooor.domain.QuestManagement;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Stage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer stageId; // 단계 고유 ID
+    private Integer id; // 단계 번호
 
-    @ManyToOne
-    @JoinColumn(name = "quest_id")
-    private Quest quest; // 해당 단계가 속한 퀘스트
-
-    @Column(name = "stage_number", nullable = false)
-    private Integer stageNumber; // 단계 번호
+    @Column(name = "stage_title")
+    private String title; // 단계 이름
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description; // 단계 설명
 
-    // 생성자
-    public Stage(Quest quest, Integer stageNumber, String description) {
-        this.quest = quest;
-        this.stageNumber = stageNumber;
-        this.description = description;
-    }
+    @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Quest> quests; // 해당 단계가 속한 퀘스트
 }

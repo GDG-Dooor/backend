@@ -2,11 +2,14 @@ package com.example.dooor.controller;
 
 import com.example.dooor.domain.User;
 import com.example.dooor.dto.TokenDTO;
-import com.example.dooor.dto.User.UserDTO;
+import com.example.dooor.dto.User.UserSignUpDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -21,8 +24,18 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<UserProfileDTO> signup(@RequestBody UserDTO userDTO) {
-        UserProfileDTO user = userService.signup(userDTO);
+    public ResponseEntity signup(@Valid @RequestBody UserSignUpDTO userSignUpDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            StringBuilder sb = new StringBuilder();
+            bindingResult.getAllErrors().forEach(objectError ->{
+                FieldError fieldError = (FieldError) objectError;
+                String message = fieldError.getDefaultMessage();
+                sb.append(fieldError.getField()).append(": ").append(message).append("\n");
+            });
+            return ResponseEntity.badRequest().body(sb.toString());
+        }
+
+        UserProfileDTO user = userService.signup(userSignUpDTO);
         return ResponseEntity.ok(user); // 사용자 정보 반환
     }
 

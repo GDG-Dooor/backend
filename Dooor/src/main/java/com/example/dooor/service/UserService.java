@@ -3,7 +3,7 @@ package com.example.dooor.service;
 import com.example.dooor.domain.Role;
 import com.example.dooor.domain.User;
 import com.example.dooor.dto.TokenDTO;
-import com.example.dooor.dto.User.UserDTO;
+import com.example.dooor.dto.User.UserSignUpDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.jwt.TokenProvider;
 import com.example.dooor.repository.UserRepository;
@@ -24,23 +24,23 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
     // 회원가입
-    public UserProfileDTO signup(UserDTO userDTO) {
-        if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+    public UserProfileDTO signup(UserSignUpDTO userSignUpDTO) {
+        if(userRepository.findByEmail(userSignUpDTO.getEmail()).isPresent()) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
         User user = User.builder()
-                .name(userDTO.getName())
-                .email(userDTO.getEmail())
-                .password(passwordEncoder.encode(userDTO.getPassword()))
-                .role(Role.USER)
-                .gender(userDTO.getGender())
+                .name(userSignUpDTO.getName())
+                .email(userSignUpDTO.getEmail())
+                .password(passwordEncoder.encode(userSignUpDTO.getPassword()))
+                .role(Role.ROLE_USER)
+                .gender(userSignUpDTO.getGender())
                 .build();
         userRepository.save(user);
 
         return UserProfileDTO.builder()
-                .name(userDTO.getName())
-                .email(userDTO.getEmail())
-                .gender(userDTO.getGender())
+                .name(userSignUpDTO.getName())
+                .email(userSignUpDTO.getEmail())
+                .gender(userSignUpDTO.getGender())
                 .rank(user.getRank())
                 .build();
     }
