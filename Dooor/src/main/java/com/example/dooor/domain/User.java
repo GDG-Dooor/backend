@@ -44,6 +44,12 @@ public class User {
     @JoinColumn(name = "current_grade_id")
     private Grade currentGrade; // 현재 등급 (Grade와의 관계)
 
+    @Column(name = "current_quest_id", columnDefinition = "INT DEFAULT 0")
+    private Integer currentQuestId; // 현재 진행중인 퀘스트 번호
+
+    @Column(name = "current_quest_cleared")
+    private boolean currentQuestCleared; // 현재 진행중인 퀘스트 클리어 여부(다음 퀘스트 실행시 false로 초기화)
+
 //    @Column(name = "google_id", unique = true)
 //    private String googleId; // 구글 계정 ID
 //
@@ -72,5 +78,9 @@ public class User {
     }
     public void changeName(String name) {
         this.name = name;
+    }
+    public void updateQuest(Integer questId, boolean currentQuestCleared) {
+        this.currentQuestId = questId;
+        this.currentQuestCleared = currentQuestCleared;
     }
 }

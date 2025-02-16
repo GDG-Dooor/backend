@@ -1,77 +1,133 @@
 package com.example.dooor.service;
 
 import com.example.dooor.domain.QuestManagement.Quest;
-import com.example.dooor.domain.QuestManagement.UserQuest;
+import com.example.dooor.domain.QuestManagement.Stage;
 import com.example.dooor.domain.User;
 
-import com.example.dooor.dto.Quest.QuestDTO;
+import com.example.dooor.dto.Quest.QuestReq;
+import com.example.dooor.dto.Quest.QuestRes;
+import com.example.dooor.dto.Quest.UserQuestMapping;
 import com.example.dooor.repository.QuestRepository;
-import com.example.dooor.repository.UserQuestRepository;
+import com.example.dooor.repository.StageRepository;
+import com.example.dooor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class QuestService {
 
     private final QuestRepository questRepository;
-    private final UserQuestRepository userQuestRepository; // UserQuestRepository 추가
+    private final StageRepository stageRepository;
+    private final UserRepository userRepository;
+
+    public QuestRes mkQuest(QuestReq questReq) {
+        // 새로운 퀘스트 생성
+        Stage stage = stageRepository.findById(questReq.getStageId())
+                .orElseThrow(() -> new IllegalArgumentException("Stage not found"));
+
+        Quest quest = Quest.builder()
+                .title(questReq.getTitle())
+                .description(questReq.getDescription())
+                .stage(stage)
+                .needImage(questReq.isNeedImage())
+                .build();
+        quest = questRepository.save(quest); // 퀘스트 저장
+
+        return QuestRes.builder()
+                .questId(quest.getQuestId())
+                .title(questReq.getTitle())
+                .description(questReq.getDescription())
+                .stageId(questReq.getStageId())
+                .needImage(questReq.isNeedImage())
+                .build();
+    }
 
     // 퀘스트 목록 조회
-    public List<Quest> getAllQuests() {
-        return questRepository.findAll();
+    public List<QuestRes> getAllQuests() {
+        List<Quest> quests = questRepository.findAll();
+        return quests.stream()
+                .map(quest -> QuestRes.builder()
+                        .questId(quest.getQuestId())
+                        .title(quest.getTitle())
+                        .description(quest.getDescription())
+                        .stageId(quest.getStage().getId())
+                        .needImage(quest.isNeedImage())
+                        .build())
+                .toList();
     }
 
     // 특정 퀘스트 정보 조회
-    public Optional<Quest> getQuestById(Integer questId) {
-        return questRepository.findById(questId);
+    public QuestRes getQuestById(Integer questId) {
+        Quest quest = questRepository.findById(questId).orElseThrow(() -> new IllegalArgumentException("Quest not found"));
+        return QuestRes.builder()
+                .questId(quest.getQuestId())
+                .title(quest.getTitle())
+                .description(quest.getDescription())
+                .stageId(quest.getStage().getId())
+                .needImage(quest.isNeedImage())
+                .build();
     }
-
+    
     // 퀘스트 시작
-    public UserQuest startQuest(Integer userId, QuestDTO questDTO) {
-        // 새로운 퀘스트 생성
-        Quest quest = new Quest();
-        quest.setTitle(questDTO.getTitle());
-        quest.setDescription(questDTO.getDescription());
-        quest.setCurrentStage(1); // 시작 단계
-        quest.setStatus("진행 중"); // 상태 설정
-        quest = questRepository.save(quest); // 퀘스트 저장
-
-        // 사용자-퀘스트 관계 생성
-        UserQuest userQuest = new UserQuest();
-        userQuest.setUser(new User(userId)); // 사용자 설정
-        userQuest.setQuest(quest); // 퀘스트 설정
-        userQuest.setStatus("미완료"); // 초기 상태
-        userQuestRepository.save(userQuest); // 사용자-퀘스트 관계 저장
-
-        return userQuest; // 사용자-퀘스트 반환
+    public UserQuestMapping startQuest(Integer userId, Integer questId) {
+        Quest quest = questRepository.findById(questId).orElseThrow(() -> new IllegalArgumentException("Quest not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.updateQuest(questId, false);
+        return UserQuestMapping.builder()
+                .userId(userId)
+                .questId(questId)
+                .needImage(quest.isNeedImage())
+                .build();
     }
 
     // 퀘스트 완료 처리
-    public boolean completeQuest(Integer userQuestId) {
-        Optional<UserQuest> optionalUserQuest = userQuestRepository.findById(userQuestId);
-        if (optionalUserQuest.isPresent()) {
-            UserQuest userQuest = optionalUserQuest.get();
-            userQuest.setStatus("클리어"); // 상태 변경
-            userQuestRepository.save(userQuest);
-            return true; // 완료 처리 성공
+    public boolean completeQuest(Integer userId, Integer questId) {
+        if(0 == 0) { // 조건 수정
+            User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            user.updateQuest(questId, true);
+            return true;
         }
-        return false; // 사용자-퀘스트 없음
+        return false;
     }
 
-    // 이미지 검증
-    public boolean verifyImage(Integer userQuestId, String imageUrl) {
-        Optional<UserQuest> optionalUserQuest = userQuestRepository.findById(userQuestId);
-        if (optionalUserQuest.isPresent()) {
-            UserQuest userQuest = optionalUserQuest.get();
-            userQuest.setPhoto(imageUrl); // 인증 사진 경로 설정
-            userQuest.setVerified(true); // 인증 여부 변경
-            userQuestRepository.save(userQuest);
-            return true; // 이미지 검증 성공
-        }
-        return false; // 사용자-퀘스트 없음
-    }
+//    // 퀘스트 시작
+//    public UserQuest startQuest(Integer userId, QuestRes questRes) {
+//
+//        // 사용자-퀘스트 관계 생성
+//        UserQuest userQuest = new UserQuest();
+//        userQuest.setUser(new User(userId)); // 사용자 설정
+//        userQuest.setQuest(quest); // 퀘스트 설정
+//        userQuest.setStatus("미완료"); // 초기 상태
+//        userQuestRepository.save(userQuest); // 사용자-퀘스트 관계 저장
+//
+//        return userQuest; // 사용자-퀘스트 반환
+//    }
+//
+//    // 퀘스트 완료 처리
+//    public boolean completeQuest(Integer userQuestId) {
+//        Optional<UserQuest> optionalUserQuest = userQuestRepository.findById(userQuestId);
+//        if (optionalUserQuest.isPresent()) {
+//            UserQuest userQuest = optionalUserQuest.get();
+//            userQuest.setStatus("클리어"); // 상태 변경
+//            userQuestRepository.save(userQuest);
+//            return true; // 완료 처리 성공
+//        }
+//        return false; // 사용자-퀘스트 없음
+//    }
+//
+//    // 이미지 검증
+//    public boolean verifyImage(Integer userQuestId, String imageUrl) {
+//        Optional<UserQuest> optionalUserQuest = userQuestRepository.findById(userQuestId);
+//        if (optionalUserQuest.isPresent()) {
+//            UserQuest userQuest = optionalUserQuest.get();
+//            userQuest.setPhoto(imageUrl); // 인증 사진 경로 설정
+//            userQuest.setVerified(true); // 인증 여부 변경
+//            userQuestRepository.save(userQuest);
+//            return true; // 이미지 검증 성공
+//        }
+//        return false; // 사용자-퀘스트 없음
+//    }
 }

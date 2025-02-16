@@ -15,9 +15,9 @@ public class Mission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer missionId; // 미션 고유 ID
 
-    @ManyToOne
-    @JoinColumn(name = "stage_id")
-    private Stage stage; // 해당 미션이 속한 단계
+//    @ManyToOne
+//    @JoinColumn(name = "stage_id")
+//    private Stage stage; // 해당 미션이 속한 단계
 
     @Column(name = "mission_number", nullable = false)
     private Integer missionNumber; // 미션 번호
@@ -30,7 +30,7 @@ public class Mission {
 
     // 생성자
     public Mission(Stage stage, Integer missionNumber, String description, String status) {
-        this.stage = stage;
+//        this.stage = stage;
         this.missionNumber = missionNumber;
         this.description = description;
         this.status = status != null ? status : "미완료";
