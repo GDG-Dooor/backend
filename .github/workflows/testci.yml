@@ -20,11 +20,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: make application-database.yaml
+    - name: Make application.yml
       run: |
         cd ./src/main/resources
-        touch ./application-database.yaml
-        echo "${{ secrets.DATABASE }}" >> ./application-database.yaml
+        touch ./application.yml
+        echo "${{ secrets.PROPERTIES }}" > ./application.yml
       shell: bash
 
     - name: Gradle Caching
