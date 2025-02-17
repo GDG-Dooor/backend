@@ -32,11 +32,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       
-      - name: Make application.yml
+      - name: Make application-prod.properties
         run: |
           cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.PROPERTIES }}" > ./application.yml
+          touch ./application-prod.properties
+          echo "${{ secrets.PROPERTIES }}" > ./application-prod.properties
         shell: bash
         
         
