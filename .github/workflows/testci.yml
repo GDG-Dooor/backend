@@ -20,11 +20,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Make application-prod.properties
+    - name: Make application.yml  # 파일 이름 수정
       run: |
         cd ./src/main/resources
-        touch ./application-prod.properties
-        echo "${{ secrets.PROPERTIES }}" > ./application-prod.properties
+        touch ./application.yml  # 파일 이름 수정
+        printf "%s" "${{ secrets.PROPERTIES }}" > ./application.yml  # echo 대신 printf 사용
       shell: bash
 
     - name: Gradle Caching
