@@ -28,8 +28,8 @@ public class User {
 
     // private Date birth
 
-    @Column(name = "gender", columnDefinition = "ENUM('남성', '여성') DEFAULT '남성'")
-    private String gender; // 성별
+//    @Column(name = "gender", columnDefinition = "ENUM('남성', '여성') DEFAULT '남성'")
+//    private String gender; // 성별
 
     @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now(); // 가입 날짜
@@ -58,11 +58,11 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String name, String email, String password, LocalDateTime createdAt, Integer rank, String gender, Role role) {
+    public User(String name, String email, String password, LocalDateTime createdAt, Integer rank, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.gender = gender;
+//        this.gender = gender;
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
         this.role = role;
         this.rank = rank != null ? rank : 0;

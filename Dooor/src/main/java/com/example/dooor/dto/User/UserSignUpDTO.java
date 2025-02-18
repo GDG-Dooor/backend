@@ -20,10 +20,11 @@ public class UserSignUpDTO {
     private String email; // 이메일 주소
 
     @NotBlank
-    @Size(min = 8, max = 255)
+    @Size(min = 8, max = 12)
     private String password; // 비밀번호
-
-    private String gender; // 성별(남성 or 여성)
+//
+//    @NotBlank
+//    private String gender; // 성별(남성 or 여성)
 
     // private String googleId; // 구글 계정 ID (구글 로그인 시 사용)
 
