@@ -4,6 +4,7 @@ import com.example.dooor.domain.Chat;
 import com.example.dooor.dto.Chat.ChatRequestDTO;
 import com.example.dooor.service.ChatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
+@Tag(name = "Chat", description = "챗봇과의 채팅 API")
 public class ChatController {
 
     private final ChatService chatService;

@@ -5,6 +5,7 @@ import com.example.dooor.dto.Quest.QuestRes;
 import com.example.dooor.dto.Quest.UserQuestMapping;
 import com.example.dooor.repository.QuestRepository;
 import com.example.dooor.service.QuestService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/quests")
 @RequiredArgsConstructor
+@Tag(name = "Quest", description = "퀘스트 추가, 정보확인 등의 API")
 public class QuestController {
 
     private final QuestService questService;

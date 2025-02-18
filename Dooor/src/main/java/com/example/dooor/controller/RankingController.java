@@ -2,6 +2,7 @@ package com.example.dooor.controller;
 
 import com.example.dooor.domain.Ranking;
 import com.example.dooor.service.RankingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/ranking")
 @RequiredArgsConstructor
+@Tag(name = "Ranking", description = "랭킹 API, 아직 미완")
 public class RankingController {
 
     private final RankingService rankingService;
