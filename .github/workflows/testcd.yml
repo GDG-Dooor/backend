@@ -32,11 +32,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Make application.yml 
+      - name: make application-database.yaml
         run: |
+          # create application-database.yaml
           cd ./src/main/resources
-          touch ./application.yml  
-          printf "%s" "${{ secrets.PROPERTIES }}" > ./application.yml
+
+          # application-database.yaml 파일 생성
+          touch ./application-database.yaml
+
+          # GitHub-Actions 에서 설정한 값을 application-database.yaml 파일에 쓰기
+          echo "${{ secrets.DATABASE }}" >> ./application-database.yaml
         shell: bash
         
       - name: Grant Execute Permission For Gradlew
