@@ -1,5 +1,6 @@
 package com.example.dooor.dto.User;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,15 +13,18 @@ public class UserSignUpDTO {
 
     @NotBlank
     @Size(max = 50)
+    @Schema(description = "사용자 이름", example = "홍길동")
     private String name; // 이름
 
     @NotBlank
     @Email(message = "이메일 양식에 맞지 않습니다.")
     @Size(max = 100)
+    @Schema(description = "사용자 이메일", example = "example@gmail.com")
     private String email; // 이메일 주소
 
     @NotBlank
     @Size(min = 8, max = 12)
+    @Schema(description = "계정 암호", example = "abcd1234")
     private String password; // 비밀번호
 //
 //    @NotBlank
