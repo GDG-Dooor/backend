@@ -47,7 +47,7 @@ public class ChatService {
         return "사용자를 찾을 수 없습니다."; // 사용자 없음
     }
 
-    public String getMessage(@RequestBody ChatRequestDTO chatRequestDTO, Principal principal) throws JsonProcessingException {
+    public String getMessage(ChatRequestDTO chatRequestDTO, Principal principal) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         String param = objectMapper.writeValueAsString(chatRequestDTO);
