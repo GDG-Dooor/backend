@@ -20,11 +20,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Make application.yml  # 파일 이름 수정
+    - name: make application-database.yaml
       run: |
+        # create application-database.yaml
         cd ./src/main/resources
-        touch ./application.yml  # 파일 이름 수정
-        printf "%s" "${{ secrets.PROPERTIES }}" > ./application.yml  # echo 대신 printf 사용
+
+        # application-database.yaml 파일 생성
+        touch ./application-database.yaml
+
+        # GitHub-Actions 에서 설정한 값을 application-database.yaml 파일에 쓰기
+        echo "${{ secrets.DATABASE }}" >> ./application-database.yaml
       shell: bash
 
     - name: Gradle Caching
