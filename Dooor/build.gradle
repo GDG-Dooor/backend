@@ -41,6 +41,11 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0' // 이하 두줄 파이썬이랑 연결
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
+
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0' // Swagger
 }
 
 

@@ -33,14 +33,14 @@ public class UserService {
                 .email(userSignUpDTO.getEmail())
                 .password(passwordEncoder.encode(userSignUpDTO.getPassword()))
                 .role(Role.ROLE_USER)
-                .gender(userSignUpDTO.getGender())
+//                .gender(userSignUpDTO.getGender())
                 .build();
         userRepository.save(user);
 
         return UserProfileDTO.builder()
                 .name(userSignUpDTO.getName())
                 .email(userSignUpDTO.getEmail())
-                .gender(userSignUpDTO.getGender())
+//                .gender(userSignUpDTO.getGender())
                 .rank(user.getRank())
                 .build();
     }

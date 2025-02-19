@@ -4,6 +4,7 @@ import com.example.dooor.dto.Stage.StageReq;
 import com.example.dooor.dto.Stage.StageRes;
 import com.example.dooor.repository.StageRepository;
 import com.example.dooor.service.StageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/stage")
 @RequiredArgsConstructor
+@Tag(name = "Stage", description = "단계 추가, 정보확인 등의 API")
 public class StageController {
 
     private final StageService stageService;

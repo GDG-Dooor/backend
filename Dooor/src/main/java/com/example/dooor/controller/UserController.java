@@ -5,9 +5,16 @@ import com.example.dooor.dto.TokenDTO;
 import com.example.dooor.dto.User.UserSignUpDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +25,23 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@Tag(name = "User", description = "유저 관련 API")
 public class UserController {
 
     private final UserService userService;
 
     // 회원가입
     @PostMapping("/signup")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공"),
+            @ApiResponse(responseCode = "400", description = "회원가입 실패")
+    })
+    @Parameters({
+            @Parameter(name = "name", description = "이름", example = "홍길동"),
+            @Parameter(name = "email", description = "이메일(중복X)", example = "example@gmail.com"),
+            @Parameter(name = "password", description = "암호 형식 8~12자", example = "abcd1234"),
+//            @Parameter(name = "gender", description = "성별", example = "남성/여성")
+    })
     public ResponseEntity signup(@Valid @RequestBody UserSignUpDTO userSignUpDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -40,8 +58,15 @@ public class UserController {
     }
 
     // 로그인
-    // 로그인
     @PostMapping("/login")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공"),
+            @ApiResponse(responseCode = "400", description = "로그인 실패")
+    })
+    @Parameters({
+            @Parameter(name = "email", description = "이메일", example = "example@gmail.com"),
+            @Parameter(name = "password", description = "암호 형식 8~12자", example = "abcd1234")
+    })
     public ResponseEntity<TokenDTO> login(@RequestParam String email, @RequestParam String password) { // 수정한 부분: 반환 타입을 ResponseEntity<TokenDTO>로 변경
         try {
             TokenDTO token = userService.login(email, password); // 수정한 부분: TokenDTO 반환받기
