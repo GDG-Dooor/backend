@@ -14,6 +14,10 @@ spring:
       hibernate:
         format_sql: false
         use_sql_comments: true
+  servlet: # S3 이미지 업로드
+    multipart:
+      max-file-size: 10MB # 업로드할 수 있는 개별 파일의 최대 크기, 기본 1MB
+      max-request-size: 10MB # multipart/form-data 요청의 최대 허용 크기, 기본 10MB
 jwt:
   secret: ${JWT_SECRET}
   access-token-validity-in-milliseconds: ${ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS}
@@ -27,3 +31,15 @@ springdoc:
 
   paths-to-match:
     - /api/**
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: dooor-bucket
+    stack:
+      auto: false
