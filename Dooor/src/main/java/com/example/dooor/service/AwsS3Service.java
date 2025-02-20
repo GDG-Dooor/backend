@@ -3,6 +3,7 @@ package com.example.dooor.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.example.dooor.dto.AwsS3DTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class AwsS3Service {
 
     private final AmazonS3 amazonS3;
 
-    public String uploadFile(MultipartFile multipartFile){
+    public AwsS3DTO uploadFile(MultipartFile multipartFile){
 
         if (multipartFile == null || multipartFile.isEmpty()) {
             return null;
@@ -40,8 +41,11 @@ public class AwsS3Service {
         } catch (IOException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
         }
-
-        return fileName;
+        String url = amazonS3.getUrl(bucket, fileName).toString();
+        return AwsS3DTO.builder()
+                .fileName(fileName)
+                .fileUrl(url)
+                .build();
     }
 
     // 파일명 난수화(추후 수정)
