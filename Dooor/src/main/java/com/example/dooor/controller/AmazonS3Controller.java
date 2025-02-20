@@ -1,5 +1,6 @@
 package com.example.dooor.controller;
 
+import com.example.dooor.dto.AwsS3DTO;
 import com.example.dooor.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ public class AmazonS3Controller {
     private final AwsS3Service awsS3Service;
 
     @PostMapping
-    public ResponseEntity<String> uploadFile(MultipartFile multipartfile){
+    public ResponseEntity<AwsS3DTO> uploadFile(MultipartFile multipartfile){
         return ResponseEntity.ok(awsS3Service.uploadFile(multipartfile));
     }
 

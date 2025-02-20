@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class AwsS3DTO {
-
+    private String fileName;
+    private String fileUrl;
 }
