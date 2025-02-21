@@ -11,5 +11,5 @@ import lombok.Setter;
 public class ChatRequestDTO {
 
     private Integer user_id; // 사용자 ID
-    private String user_input; // 메시지 내용
+    private String message; // 메시지 내용
 }
