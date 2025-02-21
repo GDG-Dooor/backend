@@ -55,7 +55,7 @@ public class ChatService {
 
         HttpEntity<String> entity = new HttpEntity<>(param, headers);
 
-        String url = "https://ai-iyjk.onrender.com/chat";
+        String url = "https://ai-iyzk.onrender.com/chat";
 
         return uniToKor(restTemplate.postForObject(url, entity, String.class));
     }

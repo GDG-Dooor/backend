@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final TokenProvider tokenProvider; //자동화 테스트 6
+    private final TokenProvider tokenProvider; //자동화 테스트 8
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -28,8 +28,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/user/signup", "/api/user/login", "/api/user/check-id", "/api/user/check-pw", "/file").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/chat/message").permitAll()
+                        .requestMatchers("/api/user/signup", "/api/user/login", "/file", "/api/user/check-id").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
