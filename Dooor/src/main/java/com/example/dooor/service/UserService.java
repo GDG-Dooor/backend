@@ -92,10 +92,7 @@ public class UserService {
 
     // 비밀번호 일치 확인
     public boolean checkPassword(String password, String passwordConfirmation) {
-        if(password.equals(passwordConfirmation)) {
-            return true;
-        }
-        return false;
+        return password.equals(passwordConfirmation);
     }
 
     // 사용자 퀘스트 진행 상태 조회

@@ -42,7 +42,7 @@ public class StageService {
                 .toList();
     }
 
-    public StageRes getStageById(int id) {
+    public StageRes getStageById(Integer id) {
         Stage stage = stageRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         return StageRes.builder()
                 .stageId(stage.getId())
@@ -52,7 +52,22 @@ public class StageService {
                 .build();
     }
 
-    public void deleteStageById(int id) {
-        stageRepository.deleteById(id);
+    public StageRes updateStage(StageReq stageReq) {
+        Stage stage = stageRepository.findById(stageReq.getStageId()).orElseThrow(IllegalArgumentException::new);
+        stageRepository.save(Stage.builder()
+                .id(stageReq.getStageId())
+                .title(stageReq.getTitle())
+                .description(stageReq.getDescription())
+                .build());
+        return StageRes.builder()
+                .stageId(stageReq.getStageId())
+                .title(stageReq.getTitle())
+                .description(stageReq.getDescription())
+                .questId(stage.getQuests().stream().map(Quest::getQuestId).toList())
+                .build();
+    }
+
+    public void deleteStageById(Integer stageId) {
+        stageRepository.deleteById(stageId);
     }
 }

@@ -58,4 +58,18 @@ public class StageController {
         }
         return ResponseEntity.ok(stageService.getStageById(stageId));
     }
+
+    @PatchMapping("/update")
+    public ResponseEntity<StageRes> updateStage(@RequestBody StageReq stageReq) {
+        if(stageRepository.findById(stageReq.getStageId()).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(stageService.updateStage(stageReq));
+    }
+
+    @DeleteMapping("/{stageId}")
+    public ResponseEntity<Integer> deleteStageById(@PathVariable int stageId) {
+        stageService.deleteStageById(stageId);
+        return ResponseEntity.ok(stageId);
+    }
 }

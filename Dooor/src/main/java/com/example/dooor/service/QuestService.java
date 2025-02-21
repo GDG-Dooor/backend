@@ -93,6 +93,30 @@ public class QuestService {
         return false;
     }
 
+    public QuestRes updateQuest(QuestReq questReq) {
+        Quest quest = questRepository.findById(questReq.getStageId()).orElseThrow(() -> new IllegalArgumentException("Quest not found"));
+        Stage stage = stageRepository.findById(questReq.getStageId()).orElseThrow(() -> new IllegalArgumentException("Stage not found"));
+
+        questRepository.save(Quest.builder()
+                .questId(questReq.getQuestId())
+                .title(questReq.getTitle())
+                .description(questReq.getDescription())
+                .stage(stage)
+                .needImage(questReq.isNeedImage())
+                .build());
+        return QuestRes.builder()
+                .questId(questReq.getQuestId())
+                .title(questReq.getTitle())
+                .description(questReq.getDescription())
+                .stageId(questReq.getStageId())
+                .needImage(questReq.isNeedImage())
+                .build();
+    }
+
+    public void deleteQuestById(Integer questId) {
+        questRepository.deleteById(questId);
+    }
+
 //    // 퀘스트 시작
 //    public UserQuest startQuest(Integer userId, QuestRes questRes) {
 //

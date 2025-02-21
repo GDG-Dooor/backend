@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class Quest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quest_id")
     private Integer questId; // 퀘스트 고유 ID
 

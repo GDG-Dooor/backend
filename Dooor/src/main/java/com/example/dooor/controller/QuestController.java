@@ -81,6 +81,19 @@ public class QuestController {
         return completed ? ResponseEntity.ok("true") : ResponseEntity.ok("false");
     }
 
+    @PatchMapping("/update")
+    public ResponseEntity<QuestRes> updateQuest(@RequestBody QuestReq questReq) {
+        if(questRepository.findById(questReq.getQuestId()).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(questService.updateQuest(questReq));
+    }
+
+    @DeleteMapping("/{questId}")
+    public ResponseEntity<Integer> deleteQuestById(@PathVariable Integer questId) {
+        questService.deleteQuestById(questId);
+        return ResponseEntity.ok(questId);
+    }
 //    // 퀘스트 시작
 //    @PostMapping("/start")
 //    public ResponseEntity<UserQuest> startQuest(@RequestBody QuestRes questRes, @RequestParam Integer userId) {
