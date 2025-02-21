@@ -63,6 +63,11 @@ public class UserService {
     public Optional<User> getUserById(Integer userId) {
         return userRepository.findById(userId);
     }
+    
+    // 이메일 반환
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     // 비밀번호 변경
     public Integer changePassword(Integer userId, String newPassword, Principal principal) {

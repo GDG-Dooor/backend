@@ -90,6 +90,18 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build()); // 사용자 없음
     }
 
+    @GetMapping("/email")
+    @Operation(summary = "사용자 이메일 조회", description = "주어진 사용자 이메일에 대한 정보를 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "사용자 정보를 성공적으로 반환했습니다."),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
+    })
+    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+        Optional<User> userOptional = userService.getUserByEmail(email);
+        return userOptional.map(ResponseEntity::ok) // 사용자 존재 시 반환
+                .orElseGet(() -> ResponseEntity.notFound().build()); // 사용자 없음
+    }
+
     // 아이디 중복 체크
     @GetMapping("/check-id")
     @Operation(summary = "아이디 중복 체크", description = "회원가입 시 주어진 이메일이 이미 존재하는지 확인합니다.")
