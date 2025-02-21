@@ -36,7 +36,7 @@ public class ChatController {
         return ResponseEntity.ok(message); // 메시지 반환
     }
 
-    @GetMapping("/message")
+    @PostMapping("/message")
     public ResponseEntity<String> getMessage(@RequestBody ChatRequestDTO chatRequestDTO, Principal principal) throws JsonProcessingException {
         return ResponseEntity.ok(chatService.getMessage(chatRequestDTO, principal));
     }

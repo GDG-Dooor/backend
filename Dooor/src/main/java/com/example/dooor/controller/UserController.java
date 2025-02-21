@@ -91,6 +91,12 @@ public class UserController {
         return ResponseEntity.ok(exists); // 중복 여부 반환
     }
 
+    @GetMapping("/check-pw")
+    public ResponseEntity<Boolean> checkPw(@RequestParam String password, @RequestParam String passwordConfirm) {
+        boolean checkPw = userService.checkPassword(password, passwordConfirm);
+        return ResponseEntity.ok(checkPw);
+    }
+
     // 사용자 퀘스트 진행 상태 조회
 //    @GetMapping("/progress")
 //    public ResponseEntity<String> getUserProgress(@RequestParam Integer userId) {
