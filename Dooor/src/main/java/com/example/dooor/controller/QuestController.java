@@ -5,6 +5,9 @@ import com.example.dooor.dto.Quest.QuestRes;
 import com.example.dooor.dto.Quest.UserQuestMapping;
 import com.example.dooor.repository.QuestRepository;
 import com.example.dooor.service.QuestService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,11 @@ public class QuestController {
     private final QuestRepository questRepository;
 
     @PostMapping("/make")
+    @Operation(summary = "퀘스트 생성", description = "새로운 퀘스트를 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "퀘스트가 성공적으로 생성되었습니다."),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
     public ResponseEntity<QuestRes> makeQuest(@RequestBody QuestReq questReq) {
         QuestRes questRes = questService.mkQuest(questReq);
         return ResponseEntity.ok(questRes);
@@ -29,30 +37,50 @@ public class QuestController {
 
     // 퀘스트 목록 조회
     @GetMapping
+    @Operation(summary = "퀘스트 목록 조회", description = "모든 퀘스트의 목록을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "퀘스트 목록을 성공적으로 반환했습니다.")
+    })
     public ResponseEntity<List<QuestRes>> getAllQuests() {
         return ResponseEntity.ok(questService.getAllQuests()); // 퀘스트 목록 반환
     }
 
     // 특정 퀘스트 정보 조회
     @GetMapping("/{questId}")
+    @Operation(summary = "특정 퀘스트 정보 조회", description = "주어진 ID의 퀘스트 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "퀘스트 정보를 성공적으로 반환했습니다."),
+            @ApiResponse(responseCode = "404", description = "퀘스트를 찾을 수 없습니다.")
+    })
     public ResponseEntity<QuestRes> getQuestById(@PathVariable Integer questId) {
-        if(questRepository.findById(questId).isEmpty()) {
+        if (questRepository.findById(questId).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(questService.getQuestById(questId));
     }
 
     @PostMapping("/start")
+    @Operation(summary = "퀘스트 시작", description = "사용자가 퀘스트를 시작합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "퀘스트가 성공적으로 시작되었습니다."),
+            @ApiResponse(responseCode = "404", description = "사용자 또는 퀘스트를 찾을 수 없습니다.")
+    })
     public ResponseEntity<UserQuestMapping> startQuest(@RequestParam Integer userId, @RequestParam Integer questId) {
         UserQuestMapping mapping = questService.startQuest(userId, questId);
         return ResponseEntity.ok(mapping);
     }
 
     @PostMapping("/complete")
+    @Operation(summary = "퀘스트 완료", description = "사용자가 퀘스트를 완료합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "퀘스트 완료 상태를 반환합니다."),
+            @ApiResponse(responseCode = "404", description = "사용자 또는 퀘스트를 찾을 수 없습니다.")
+    })
     public ResponseEntity<String> completeQuest(@RequestParam Integer userId, @RequestParam Integer questId) {
         boolean completed = questService.completeQuest(userId, questId);
         return completed ? ResponseEntity.ok("true") : ResponseEntity.ok("false");
     }
+
 //    // 퀘스트 시작
 //    @PostMapping("/start")
 //    public ResponseEntity<UserQuest> startQuest(@RequestBody QuestRes questRes, @RequestParam Integer userId) {
