@@ -64,26 +64,46 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    // 이메일 반환
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     // 비밀번호 변경
-    public Integer changePassword(Integer userId, String newPassword, Principal principal) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        Integer tokenUserId = Integer.parseInt(principal.getName()); // 토큰으로 접근한 유저 확인
-        Optional<User> tokenUserOptional = userRepository.findById(tokenUserId);
-        if (userOptional.isPresent() && tokenUserOptional.isPresent()) {
+    public Integer changePassword(String email, String newPassword) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
-            User tokenUser = tokenUserOptional.get();
             if (passwordEncoder.matches(newPassword, user.getPassword())) {
                 return 1; // 비밀번호 일치로 변경 불가
-            }
-            if (!Objects.equals(user.getUserId(), tokenUser.getUserId())) {
-                return 2; // 토큰과 사용자 불일치로 변경 불가
             }
             user.changePassword(passwordEncoder.encode(newPassword)); // 비밀번호 암호화
             userRepository.save(user);
             return 0; // 비밀번호 변경 성공
         }
-        return 3; // 사용자 없음
+        return 2; // 사용자 없음
     }
+
+//    // 비밀번호 변경
+//    public Integer changePassword(Integer userId, String newPassword, Principal principal) {
+//        Optional<User> userOptional = userRepository.findById(userId);
+//        Integer tokenUserId = Integer.parseInt(principal.getName()); // 토큰으로 접근한 유저 확인
+//        Optional<User> tokenUserOptional = userRepository.findById(tokenUserId);
+//        if (userOptional.isPresent() && tokenUserOptional.isPresent()) {
+//            User user = userOptional.get();
+//            User tokenUser = tokenUserOptional.get();
+//            if (passwordEncoder.matches(newPassword, user.getPassword())) {
+//                return 1; // 비밀번호 일치로 변경 불가
+//            }
+//            if (!Objects.equals(user.getUserId(), tokenUser.getUserId())) {
+//                return 2; // 토큰과 사용자 불일치로 변경 불가
+//            }
+//            user.changePassword(passwordEncoder.encode(newPassword)); // 비밀번호 암호화
+//            userRepository.save(user);
+//            return 0; // 비밀번호 변경 성공
+//        }
+//        return 3; // 사용자 없음
+//    }
 
     // 아이디 중복 체크
     public boolean checkIdExists(String email) {

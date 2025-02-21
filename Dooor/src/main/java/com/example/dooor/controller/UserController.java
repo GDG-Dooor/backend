@@ -90,6 +90,18 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build()); // 사용자 없음
     }
 
+    @GetMapping("/email")
+    @Operation(summary = "사용자 이메일 조회", description = "주어진 사용자 이메일에 대한 정보를 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "사용자 정보를 성공적으로 반환했습니다."),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
+    })
+    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+        Optional<User> userOptional = userService.getUserByEmail(email);
+        return userOptional.map(ResponseEntity::ok) // 사용자 존재 시 반환
+                .orElseGet(() -> ResponseEntity.notFound().build()); // 사용자 없음
+    }
+
     // 아이디 중복 체크
     @GetMapping("/check-id")
     @Operation(summary = "아이디 중복 체크", description = "회원가입 시 주어진 이메일이 이미 존재하는지 확인합니다.")
@@ -141,21 +153,38 @@ public class UserController {
 
     // 비밀번호 변경
     @PostMapping("/password")
-    @Operation(summary = "비밀번호 변경", description = "사용자가 비밀번호를 변경합니다.")
+    @Operation(summary = "비밀번호 재설정", description = "로그인 창에서 사용 / 사용자가 비밀번호를 변경합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
-            @ApiResponse(responseCode = "403", description = "비밀번호 변경 실패: 권한 없음 또는 현재 비밀번호와 동일"),
+            @ApiResponse(responseCode = "200", description = "비밀번호 재설정 성공"),
+            @ApiResponse(responseCode = "403", description = "비밀번호 재설정 실패 : 현재 비밀번호와 동일"),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
-    public ResponseEntity<String> changePassword(@RequestParam Integer userId, @RequestParam String newPassword, Principal principal) {
-        Integer changed = userService.changePassword(userId, newPassword, principal);
+    public ResponseEntity<String> changePassword(@RequestParam String email, @RequestParam String newPassword) {
+        Integer changed = userService.changePassword(email, newPassword);
         if (changed == 0) return ResponseEntity.ok().build();
         else if (changed == 1) return ResponseEntity.status(403)
                 .body("현재 사용중인 비밀번호입니다.");
-        else if (changed == 2) return ResponseEntity.status(403)
-                .body("변경할 수 있는 권한이 없습니다.");
         else return ResponseEntity.notFound().build();
     }
+
+
+//    // 비밀번호 변경
+//    @PostMapping("/password")
+//    @Operation(summary = "비밀번호 재설정", description = "로그인 창에서 사용 / 사용자가 비밀번호를 변경합니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "비밀번호 재설정 성공"),
+//            @ApiResponse(responseCode = "403", description = "비밀번호 재설정 실패: 권한 없음 또는 현재 비밀번호와 동일"),
+//            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
+//    })
+//    public ResponseEntity<String> changePassword(@RequestParam Integer userId, @RequestParam String newPassword, Principal principal) {
+//        Integer changed = userService.changePassword(userId, newPassword, principal);
+//        if (changed == 0) return ResponseEntity.ok().build();
+//        else if (changed == 1) return ResponseEntity.status(403)
+//                .body("현재 사용중인 비밀번호입니다.");
+//        else if (changed == 2) return ResponseEntity.status(403)
+//                .body("변경할 수 있는 권한이 없습니다.");
+//        else return ResponseEntity.notFound().build();
+//    }
 
     // 닉네임 변경
     @PatchMapping("/name")
