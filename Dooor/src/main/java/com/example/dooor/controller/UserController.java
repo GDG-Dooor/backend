@@ -42,7 +42,7 @@ public class UserController {
             @Parameter(name = "password", description = "암호 형식 8~12자", example = "abcd1234"),
 //            @Parameter(name = "gender", description = "성별", example = "남성/여성")
     })
-    public ResponseEntity signup(@Valid @RequestBody UserSignUpDTO userSignUpDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> signup(@Valid @RequestBody UserSignUpDTO userSignUpDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             bindingResult.getAllErrors().forEach(objectError -> {
