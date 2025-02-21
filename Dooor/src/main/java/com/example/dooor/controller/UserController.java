@@ -92,7 +92,7 @@ public class UserController {
 
     // 아이디 중복 체크
     @GetMapping("/check-id")
-    @Operation(summary = "아이디 중복 체크", description = "주어진 이메일이 이미 존재하는지 확인합니다.")
+    @Operation(summary = "아이디 중복 체크", description = "회원가입 시 주어진 이메일이 이미 존재하는지 확인합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "중복 여부 반환"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
@@ -100,6 +100,16 @@ public class UserController {
     public ResponseEntity<Boolean> checkIdExists(@RequestParam String email) {
         boolean exists = userService.checkIdExists(email);
         return ResponseEntity.ok(exists); // 중복 여부 반환
+    }
+
+    @GetMapping("/check-pw")
+    @Operation(summary = "암호 중복체크", description = "회원가입 시 암호의 일치를 확인합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "일치 여부 반환"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
+    public ResponseEntity<Boolean> checkPw(@RequestParam String password, @RequestParam String passwordConfirm) {
+        return ResponseEntity.ok(userService.checkPassword(password, passwordConfirm));
     }
 
     // 로그아웃 처리
