@@ -90,6 +90,14 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    // 비밀번호 일치 확인
+    public boolean checkPassword(String password, String passwordConfirmation) {
+        if(password.equals(passwordConfirmation)) {
+            return true;
+        }
+        return false;
+    }
+
     // 사용자 퀘스트 진행 상태 조회
 //    public String getUserProgress(Integer userId) {
 //        // 여기에 사용자 퀘스트 진행 상태를 조회하는 로직 추가

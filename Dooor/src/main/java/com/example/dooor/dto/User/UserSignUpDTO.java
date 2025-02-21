@@ -26,6 +26,9 @@ public class UserSignUpDTO {
     @Size(min = 8, max = 12)
     @Schema(description = "계정 암호", example = "abcd1234")
     private String password; // 비밀번호
+
+    @NotBlank
+    private String passwordConfirm; // 비밀번호 확인
 //
 //    @NotBlank
 //    private String gender; // 성별(남성 or 여성)
