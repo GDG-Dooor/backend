@@ -42,7 +42,7 @@ public class StageService {
                 .toList();
     }
 
-    public StageRes getStageById(int id) {
+    public StageRes getStageById(Integer id) {
         Stage stage = stageRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         return StageRes.builder()
                 .stageId(stage.getId())
@@ -67,7 +67,7 @@ public class StageService {
                 .build();
     }
 
-    public void deleteStageById(int id) {
-        stageRepository.deleteById(id);
+    public void deleteStageById(Integer stageId) {
+        stageRepository.deleteById(stageId);
     }
 }
