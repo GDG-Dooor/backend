@@ -12,6 +12,7 @@ import com.example.dooor.repository.StageRepository;
 import com.example.dooor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,15 +30,16 @@ public class QuestService {
                 .orElseThrow(() -> new IllegalArgumentException("Stage not found"));
 
         Quest quest = Quest.builder()
+                .questId(questReq.getQuestId())
                 .title(questReq.getTitle())
                 .description(questReq.getDescription())
                 .stage(stage)
                 .needImage(questReq.isNeedImage())
                 .build();
-        quest = questRepository.save(quest); // 퀘스트 저장
+        questRepository.save(quest); // 퀘스트 저장
 
         return QuestRes.builder()
-                .questId(quest.getQuestId())
+                .questId(questReq.getQuestId())
                 .title(questReq.getTitle())
                 .description(questReq.getDescription())
                 .stageId(questReq.getStageId())
@@ -75,6 +77,7 @@ public class QuestService {
     public UserQuestMapping startQuest(Integer userId, Integer questId) {
         Quest quest = questRepository.findById(questId).orElseThrow(() -> new IllegalArgumentException("Quest not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if(questId <= user.getCurrentQuestId()) throw new IllegalArgumentException("이미 진행한 퀘스트입니다.");
         user.updateQuest(questId, false);
         return UserQuestMapping.builder()
                 .userId(userId)
@@ -92,6 +95,8 @@ public class QuestService {
         }
         return false;
     }
+
+//    public boolean validateQuest(MultipartFile multipartFile) {}
 
     public QuestRes updateQuest(QuestReq questReq) {
         Quest quest = questRepository.findById(questReq.getStageId()).orElseThrow(() -> new IllegalArgumentException("Quest not found"));
