@@ -60,7 +60,7 @@ public class ChatService {
         return uniToKor(restTemplate.postForObject(url, entity, String.class));
     }
 
-    public String uniToKor(String uni){
+    private String uniToKor(String uni){
         StringBuilder result = new StringBuilder();
 
         for(int i = 0; i < uni.length(); i++){

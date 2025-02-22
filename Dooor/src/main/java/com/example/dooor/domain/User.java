@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Setter
 public class User {
 
     @Id
@@ -58,7 +60,7 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String name, String email, String password, LocalDateTime createdAt, Integer rank, Role role) {
+    public User(String name, String email, String password, LocalDateTime createdAt, Integer rank, Role role, Integer currentQuestId, boolean currentQuestCleared) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -66,6 +68,8 @@ public class User {
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
         this.role = role;
         this.rank = rank != null ? rank : 0;
+        this.currentQuestId = currentQuestId;
+        this.currentQuestCleared = currentQuestCleared;
     }
 
     // 사용자 ID를 설정할 수 있는 생성자 추가
