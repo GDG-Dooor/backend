@@ -33,6 +33,8 @@ public class UserService {
                 .email(userSignUpDTO.getEmail())
                 .password(passwordEncoder.encode(userSignUpDTO.getPassword()))
                 .role(Role.ROLE_USER)
+                .currentQuestId(1)
+                .currentQuestCleared(false)
 //                .gender(userSignUpDTO.getGender())
                 .build();
         userRepository.save(user);

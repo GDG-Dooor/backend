@@ -10,9 +10,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -79,6 +84,12 @@ public class QuestController {
     public ResponseEntity<String> completeQuest(@RequestParam Integer userId, @RequestParam Integer questId) {
         boolean completed = questService.completeQuest(userId, questId);
         return completed ? ResponseEntity.ok("true") : ResponseEntity.ok("false");
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<JSONObject> validateQuest(@RequestPart MultipartFile image, Principal principal) throws IOException, ParseException {
+        return ResponseEntity.ok(questService.validateQuest(image, principal));
+//        return questService.validateQuest(image, principal);
     }
 
     @PatchMapping("/update")

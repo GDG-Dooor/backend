@@ -4,6 +4,7 @@ import com.example.dooor.domain.User;
 import com.example.dooor.dto.TokenDTO;
 import com.example.dooor.dto.User.UserSignUpDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
+import com.example.dooor.repository.UserRepository;
 import com.example.dooor.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +29,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     // 회원가입
     @PostMapping("/signup")
