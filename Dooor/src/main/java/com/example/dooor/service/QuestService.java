@@ -138,8 +138,64 @@ public class QuestService {
 //        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
 //        HttpEntity<MultipartFile> entity = new HttpEntity<>(image, headers);
 
-        if(currentQuestId == 4) {
+        if(currentQuestId == 10) {
+            String url = "http://3.39.97.107:5000/positive";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 23) {
+            String url = "http://3.39.97.107:5000/egg";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 31) {
+            String url = "http://3.39.97.107:5000/paper";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 36) {
+            String url = "http://3.39.97.107:5000/sky";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 40 || currentQuestId == 45 || currentQuestId == 47) {
             String url = "http://3.39.97.107:5000/ocr";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 50) {
+            String url = "http://3.39.97.107:5000/library";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 52) {
+            String url = "http://3.39.97.107:5000/microphone";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 53) {
+            String url = "http://3.39.97.107:5000/movie";
+            String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
+            st = st.replace("\\n", "\n");
+            return parseJson(st);
+        }
+
+        if(currentQuestId == 54) {
+            String url = "http://3.39.97.107:5000/mountain";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
             return parseJson(st);

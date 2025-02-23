@@ -22,5 +22,5 @@ public class Stage {
     private String description; // 단계 설명
 
     @OneToMany(mappedBy = "stage", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Quest> quests; // 해당 단계가 속한 퀘스트
+    private List<Quest> quests; // 해당 단계에 속한 퀘스트
 }
