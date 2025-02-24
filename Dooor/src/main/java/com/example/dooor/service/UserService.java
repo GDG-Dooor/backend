@@ -1,11 +1,13 @@
 package com.example.dooor.service;
 
+import com.example.dooor.domain.RefreshToken;
 import com.example.dooor.domain.Role;
 import com.example.dooor.domain.User;
 import com.example.dooor.dto.TokenDTO;
 import com.example.dooor.dto.User.UserSignUpDTO;
 import com.example.dooor.dto.User.UserProfileDTO;
 import com.example.dooor.jwt.TokenProvider;
+import com.example.dooor.repository.RefreshTokenRepository;
 import com.example.dooor.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final BCryptPasswordEncoder passwordEncoder; // 비밀번호 암호화를 위한 BCryptPasswordEncoder
     private final TokenProvider tokenProvider;
 
@@ -28,6 +31,7 @@ public class UserService {
         if(userRepository.findByEmail(userSignUpDTO.getEmail()).isPresent()) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
+
         User user = User.builder()
                 .name(userSignUpDTO.getName())
                 .email(userSignUpDTO.getEmail())
@@ -39,11 +43,17 @@ public class UserService {
                 .build();
         userRepository.save(user);
 
+        String refreshToken = tokenProvider.createRefreshToken(user);
+        RefreshToken refBuilder = RefreshToken.builder()
+                .id(user.getUserId())
+                .refreshToken(refreshToken)
+                .build();
+        refreshTokenRepository.save(refBuilder);
+
         return UserProfileDTO.builder()
                 .name(userSignUpDTO.getName())
                 .email(userSignUpDTO.getEmail())
 //                .gender(userSignUpDTO.getGender())
-                .rank(user.getRank())
                 .build();
     }
 
@@ -54,8 +64,17 @@ public class UserService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             String accessToken = tokenProvider.createAccessToken(user); // 수정한 부분: 토큰 생성
+            String refreshToken = tokenProvider.createRefreshToken(user);
+            RefreshToken refBuilder = RefreshToken.builder()
+                    .id(user.getUserId())
+                    .refreshToken(refreshToken)
+                    .build();
+            refreshTokenRepository.save(refBuilder);
+
+            System.out.println("1");
             return TokenDTO.builder()
                     .accessToken(accessToken)
+                    .refreshToken(refreshToken)
                     .build(); // 수정한 부분: TokenDTO 반환
         }
         throw new RuntimeException("로그인 실패: 이메일 또는 비밀번호가 잘못되었습니다."); // 수정한 부분: 예외 처리

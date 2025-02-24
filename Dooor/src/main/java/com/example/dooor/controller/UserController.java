@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -73,7 +74,10 @@ public class UserController {
     public ResponseEntity<TokenDTO> login(@RequestParam String email, @RequestParam String password) {
         try {
             TokenDTO token = userService.login(email, password); // 로그인 성공 시 토큰 반환
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
+                    .header("refresh-token", "Bearer " + token.getRefreshToken())
+                    .body(token);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null); // 로그인 실패 시 400 반환
         }

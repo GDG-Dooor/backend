@@ -1,18 +1,15 @@
 package com.example.dooor.domain;
 
-import com.example.dooor.domain.QuestManagement.Grade;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@Setter
 public class User {
 
     @Id
@@ -39,12 +36,12 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @Column(name = "`rank`", columnDefinition = "INT DEFAULT 0")
-    private Integer rank = 0; // 랭킹 점수
+//    @Column(name = "`rank`", columnDefinition = "INT DEFAULT 0")
+//    private Integer rank = 0; // 랭킹 점수
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "current_grade_id")
-    private Grade currentGrade; // 현재 등급 (Grade와의 관계)
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "current_grade_id")
+//    private Grade currentGrade; // 현재 등급 (Grade와의 관계)
 
     @Column(name = "current_quest_id", columnDefinition = "INT DEFAULT 0")
     private Integer currentQuestId; // 현재 진행중인 퀘스트 번호
@@ -60,14 +57,14 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String name, String email, String password, LocalDateTime createdAt, Integer rank, Role role, Integer currentQuestId, boolean currentQuestCleared) {
+    public User(String name, String email, String password, LocalDateTime createdAt, Role role, Integer currentQuestId, boolean currentQuestCleared) {
         this.name = name;
         this.email = email;
         this.password = password;
 //        this.gender = gender;
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
         this.role = role;
-        this.rank = rank != null ? rank : 0;
+//        this.rank = rank != null ? rank : 0;
         this.currentQuestId = currentQuestId;
         this.currentQuestCleared = currentQuestCleared;
     }
