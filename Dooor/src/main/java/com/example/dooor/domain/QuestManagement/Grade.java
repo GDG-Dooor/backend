@@ -27,8 +27,8 @@ public class Grade {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description; // 등급 설명
 
-    @OneToMany(mappedBy = "currentGrade")
-    private List<User> users; // 해당 등급을 가진 사용자들
+//    @OneToMany(mappedBy = "currentGrade")
+//    private List<User> users; // 해당 등급을 가진 사용자들
 
     // 생성자
     public Grade(String gradeName, Integer requiredStage, String description) {

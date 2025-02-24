@@ -1,9 +1,14 @@
 package com.example.dooor.jwt;
 
+import com.example.dooor.domain.RefreshToken;
 import com.example.dooor.domain.User;
+import com.example.dooor.dto.User.AccessTokenRes;
+import com.example.dooor.repository.RefreshTokenRepository;
+import com.example.dooor.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,23 +33,43 @@ public class TokenProvider {
 
     private final Key key;
     private final long accessTokenValidityTime;
+    private final long refreshTokenValidityTime;
+    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenProvider(@Value("${jwt.secret}") String secretKey,
-                         @Value("${jwt.access-token-validity-in-milliseconds}") long accessTokenValidityTime) {
+                         @Value("${jwt.access-token-validity-in-milliseconds}") long accessTokenValidityTime,
+                         @Value("${REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS}") long refreshTokenValidityTime, UserRepository userRepository, RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenValidityTime = accessTokenValidityTime;
+        this.refreshTokenValidityTime = refreshTokenValidityTime;
+        this.userRepository = userRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public String createAccessToken(User user) {
-        long nowTime = (new Date().getTime());
+        Date date = new Date();
 
-        Date accessTokenExpiredTime = new Date(nowTime + accessTokenValidityTime);
+        Date accessTokenExpiredTime = new Date(date.getTime() + accessTokenValidityTime);
 
         return Jwts.builder()
                 .setSubject(user.getUserId().toString())
                 .claim(ROLE_CLAIM, user.getRole().name())
+                .setIssuedAt(date)
                 .setExpiration(accessTokenExpiredTime)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String createRefreshToken(User user) {
+        Date date = new Date();
+
+        Date refreshTokenExpiredTime = new Date(date.getTime() + refreshTokenValidityTime);
+
+        return Jwts.builder()
+                .setSubject(user.getUserId().toString())
+                .setExpiration(refreshTokenExpiredTime)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -117,5 +142,23 @@ public class TokenProvider {
         } catch (SignatureException e) {
             throw new RuntimeException("토큰 복호화에 실패했습니다.");
         }
+    }
+
+    public AccessTokenRes reissueAccessToken(HttpServletRequest request) {
+        String token = resolveToken(request);
+
+        Integer userId = Integer.parseInt(parseClaims(token).getSubject());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("유저 없음"));
+        RefreshToken refreshToken = refreshTokenRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("토큰 없음"));
+
+        if(token.equals(refreshToken.getRefreshToken())){
+            throw new RuntimeException("리프레쉬 토큰이 다름");
+        }
+
+        return AccessTokenRes.builder()
+                .accessToken(createAccessToken(user))
+                .build();
     }
 }
