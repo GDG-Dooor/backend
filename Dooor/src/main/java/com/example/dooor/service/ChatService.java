@@ -1,9 +1,7 @@
 package com.example.dooor.service;
 
-import com.example.dooor.domain.Chat;
 import com.example.dooor.domain.User;
 import com.example.dooor.dto.Chat.ChatRequestDTO;
-import com.example.dooor.repository.ChatRepository;
 import com.example.dooor.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +10,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
@@ -22,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatService {
 
-    private final ChatRepository chatRepository;
     private final UserRepository userRepository; // 사용자 정보를 조회하기 위한 UserRepository
     private final ObjectMapper objectMapper;
 

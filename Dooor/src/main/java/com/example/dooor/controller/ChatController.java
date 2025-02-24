@@ -1,6 +1,5 @@
 package com.example.dooor.controller;
 
-import com.example.dooor.domain.Chat;
 import com.example.dooor.dto.Chat.ChatRequestDTO;
 import com.example.dooor.service.ChatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
