@@ -1,7 +1,7 @@
 package com.example.dooor.config;
 
 import com.example.dooor.jwt.JwtFilter;
-import com.example.dooor.jwt.TokenProvider;
+import com.example.dooor.jwt.application.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
