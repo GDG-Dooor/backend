@@ -5,6 +5,7 @@ import com.example.dooor.chat.api.request.ChatRequestDTO;
 import com.example.dooor.user.domain.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -46,10 +47,17 @@ public class ChatService {
     public String getMessage(ChatRequestDTO chatRequestDTO, Principal principal) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        String param = objectMapper.writeValueAsString(chatRequestDTO);
+
+        User user = userRepository.findById(Integer.parseInt(principal.getName()))
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        String userName = user.getName();
+
+        String jsonBody = "{\"user_id\":\"" + userName + "\", \"message\":\"" + chatRequestDTO.getMessage() + "\"}";
+//        String param = objectMapper.writeValueAsString(chatRequestDTO);
+//        String param = objectMapper.writeValueAsString(jsonBody);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> entity = new HttpEntity<>(param, headers);
+        HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
 
         String url = "https://ai-iyzk.onrender.com/chat";
 
