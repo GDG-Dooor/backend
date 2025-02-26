@@ -112,7 +112,7 @@ public class QuestService {
         return false;
     }
 
-    public JSONObject validateQuest(MultipartFile multipartFile, Principal principal) throws IOException, ParseException {
+    public Boolean validateQuest(MultipartFile multipartFile, Principal principal) throws IOException, ParseException {
 
         AwsS3DTO awsS3DTO = awsS3Service.uploadFile(multipartFile); // 사진 업로드
 
@@ -143,66 +143,84 @@ public class QuestService {
             String url = "http://3.39.97.107:5000/positive";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("is_writing_motivation").toString());
         }
 
         if(currentQuestId == 23) {
             String url = "http://3.39.97.107:5000/egg";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("is_fried_egg").toString());
         }
 
         if(currentQuestId == 31) {
             String url = "http://3.39.97.107:5000/paper";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("paper_detected").toString());
         }
 
         if(currentQuestId == 36) {
             String url = "http://3.39.97.107:5000/sky";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("is_sky").toString());
         }
 
         if(currentQuestId == 40 || currentQuestId == 45 || currentQuestId == 47) {
             String url = "http://3.39.97.107:5000/ocr";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("is_receipt").toString());
         }
 
         if(currentQuestId == 50) {
             String url = "http://3.39.97.107:5000/library";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("is_library_receipt").toString());
         }
 
         if(currentQuestId == 52) {
             String url = "http://3.39.97.107:5000/microphone";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("microphone_detected").toString());
         }
 
         if(currentQuestId == 53) {
             String url = "http://3.39.97.107:5000/movie";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("is_movie_ticket").toString());
         }
 
         if(currentQuestId == 54) {
             String url = "http://3.39.97.107:5000/mountain";
             String st = uniToKor(restTemplate.postForObject(url, entity, String.class));
             st = st.replace("\\n", "\n");
-            return parseJson(st);
+            JSONObject jsonObj = parseJson(st);
+
+            return Boolean.parseBoolean(jsonObj.get("is_mountain").toString());
         }
 
-        return null;
+        return false;
 //        return ResponseEntity.ok().build();
     }
 
