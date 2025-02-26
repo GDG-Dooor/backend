@@ -58,8 +58,9 @@ public class ChatService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
+//        HttpEntity<String> entity = new HttpEntity<>(param, headers);
 
-        String url = "https://ai-iyzk.onrender.com/chat";
+        String url = "https://ai-iyjk.onrender.com/chat";
 
         return uniToKor(restTemplate.postForObject(url, entity, String.class));
     }
