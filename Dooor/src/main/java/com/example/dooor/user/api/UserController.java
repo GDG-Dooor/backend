@@ -136,8 +136,8 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 로그아웃했습니다.")
     })
-    public ResponseEntity<Void> logout() {
-        userService.logout(); // 로그아웃 처리
+    public ResponseEntity<Void> logout(Principal principal) { // Principal 추가
+        userService.logout(principal); // 로그아웃 처리
         return ResponseEntity.ok().build(); // 성공적으로 로그아웃
     }
 

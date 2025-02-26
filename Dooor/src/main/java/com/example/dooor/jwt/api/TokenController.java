@@ -17,4 +17,12 @@ public class TokenController {
     public ResponseEntity<AccessTokenRes> createNewAccessToken(HttpServletRequest request) {
         return ResponseEntity.ok(tokenProvider.reissueAccessToken(request));
     }
+    @PostMapping("/api/token/revoke")
+    public ResponseEntity<Void> revokeTokens(HttpServletRequest request) {
+        // 엑세스 토큰 무효화 로직 추가
+        String accessToken = tokenProvider.resolveToken(request); // 요청에서 엑세스 토큰 추출
+        tokenProvider.revokeAccessToken(accessToken); // 블랙리스트에 추가하는 메서드 호출
+
+        return ResponseEntity.ok().build(); // 성공적으로 무효화
+    }
 }
