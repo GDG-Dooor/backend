@@ -87,7 +87,7 @@ public class QuestController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<JSONObject> validateQuest(@RequestPart MultipartFile image, Principal principal) throws IOException, ParseException {
+    public ResponseEntity<Boolean> validateQuest(@RequestPart MultipartFile image, Principal principal) throws IOException, ParseException {
         return ResponseEntity.ok(questService.validateQuest(image, principal));
 //        return questService.validateQuest(image, principal);
     }
