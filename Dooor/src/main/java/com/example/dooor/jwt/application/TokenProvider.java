@@ -161,4 +161,9 @@ public class TokenProvider {
                 .accessToken(createAccessToken(user))
                 .build();
     }
+    public void revokeAccessToken(String accessToken) {
+        // 블랙리스트에 엑세스 토큰 추가하는 로직
+        // 예: Redis, 데이터베이스 또는 메모리에 저장
+        System.out.println("엑세스 토큰이 무효화되었습니다: " + accessToken);
+    }
 }

@@ -143,9 +143,18 @@ public class UserService {
 //    }
 
     // 로그아웃 처리 (세션 무효화 등 처리 필요)
-    public void logout() {
-        // 로그아웃 로직 (예: 세션 무효화)
-        // 이 메서드는 실제로 Controller에서 세션을 무효화하는 방식으로 구현해야 함
+    public void logout(Principal principal) {
+        // 사용자의 ID를 통해 리프레시 토큰을 찾아 무효화
+        Integer userId = Integer.parseInt(principal.getName());
+
+        // 리프레시 토큰 무효화 로직 추가
+        refreshTokenRepository.findById(userId).ifPresent(refreshToken -> {
+            refreshTokenRepository.delete(refreshToken); // 리프레시 토큰 삭제
+        });
+
+        // 엑세스 토큰 무효화 로직 (예: 블랙리스트에 추가)
+        // 이 부분은 실제 구현에 따라 다를 수 있음
+        System.out.println("사용자가 로그아웃했습니다: " + principal.getName());
     }
 
     // 탈퇴하기
