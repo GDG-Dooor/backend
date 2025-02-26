@@ -52,7 +52,7 @@ public class ChatService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         String userName = user.getName();
 
-        String jsonBody = "{\"user_id\":\"" + userName + "\", \"message\":\"" + chatRequestDTO.getMessage() + "\"}";
+        String jsonBody = "{\"user_id\":\"" + principal.getName() + "\", \"user_name\":\"" + user.getName() + "\",\"message\":\"" + chatRequestDTO.getMessage() + "\"}";
 //        String param = objectMapper.writeValueAsString(chatRequestDTO);
 //        String param = objectMapper.writeValueAsString(jsonBody);
         headers.setContentType(MediaType.APPLICATION_JSON);

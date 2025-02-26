@@ -194,4 +194,16 @@ public class UserService {
         }
         return 3; // 사용자 없음
     }
+
+    public Integer getCurrentQuestId(Principal principal) {
+        User user = userRepository.findByEmail(principal.getName()).get();
+
+        return user.getCurrentQuestId();
+    }
+
+    public boolean getCurrentQuestCleared(Principal principal){
+        User user = userRepository.findByEmail(principal.getName()).get();
+
+        return user.isCurrentQuestCleared();
+    }
 }
