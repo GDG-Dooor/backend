@@ -92,7 +92,6 @@ public class QuestService {
     public UserQuestMapping startQuest(Integer userId, Integer questId) {
         Quest quest = questRepository.findById(questId).orElseThrow(() -> new IllegalArgumentException("Quest not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if(questId <= user.getCurrentQuestId()) throw new IllegalArgumentException("이미 진행한 퀘스트입니다.");
         user.updateQuest(questId, false);
         userRepository.save(user);
         return UserQuestMapping.builder()
@@ -107,6 +106,7 @@ public class QuestService {
         if(0 == 0) { // 조건 수정
             User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
             user.updateQuest(questId, true);
+            userRepository.save(user);
             return true;
         }
         return false;

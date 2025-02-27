@@ -196,13 +196,13 @@ public class UserService {
     }
 
     public Integer getCurrentQuestId(Principal principal) {
-        User user = userRepository.findByEmail(principal.getName()).get();
+        User user = userRepository.findById(Integer.parseInt(principal.getName())).get();
 
         return user.getCurrentQuestId();
     }
 
     public boolean getCurrentQuestCleared(Principal principal){
-        User user = userRepository.findByEmail(principal.getName()).get();
+        User user = userRepository.findById(Integer.parseInt(principal.getName())).get();
 
         return user.isCurrentQuestCleared();
     }
