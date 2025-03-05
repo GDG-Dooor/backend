@@ -48,6 +48,8 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0' // Swagger
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS 연결
+
+	implementation 'redis.clients:jedis:4.2.3' // redis
 }
 
 
