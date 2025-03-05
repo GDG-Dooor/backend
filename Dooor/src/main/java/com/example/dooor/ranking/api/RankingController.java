@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/ranking")
 @RequiredArgsConstructor
-@Tag(name = "Ranking", description = "랭킹 API, 아직 미완")
+@Tag(name = "Ranking", description = "랭킹 API")
 public class RankingController {
 
     private final RankingService rankingService;
@@ -34,7 +34,7 @@ public class RankingController {
     }
 
     // 사용자 개인 랭킹 조회
-    @GetMapping
+    @GetMapping("/user")
     @Operation(summary = "사용자 개인 랭킹 조회", description = "주어진 사용자 ID에 대한 개인 랭킹을 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "사용자 랭킹을 성공적으로 반환했습니다."),
@@ -47,7 +47,7 @@ public class RankingController {
     }
 
     // 랭킹 점수 업데이트
-    @PostMapping
+    @PostMapping("/update")
     @Operation(summary = "랭킹 점수 업데이트", description = "사용자 ID와 새로운 점수를 이용해 랭킹 점수를 업데이트합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "랭킹 점수가 성공적으로 업데이트되었습니다."),

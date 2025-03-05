@@ -5,6 +5,7 @@ import com.example.dooor.ranking.domain.repository.RankingRepository;
 import com.example.dooor.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,11 +16,15 @@ import java.util.Optional;
 public class RankingService {
 
     private final RankingRepository rankingRepository;
-    private final UserRepository userRepository; // 사용자 정보를 조회하기 위한 UserRepository
+    private final UserRepository userRepository;
+    private final RedisRankingService redisRankingService;
 
     // 전체 랭킹 조회
     public List<Ranking> getAllRankings() {
-        return rankingRepository.findAllByOrderByScoreDesc(); // 점수 기준으로 전체 랭킹 조회
+        List<String> topUsers = redisRankingService.getTopRankings(50); // 상위 50명 조회
+        return rankingRepository.findByUser_UserIdIn(topUsers.stream()
+                .map(Integer::parseInt)
+                .toList()); // topUsers를 이용하여 Ranking 객체로 변환 후 반환
     }
 
     // 사용자 개인 랭킹 조회
@@ -36,8 +41,18 @@ public class RankingService {
             ranking.setScore(newScore); // 새로운 점수 설정
             ranking.setUpdatedAt(LocalDateTime.now()); // 업데이트 시간 설정
             rankingRepository.save(ranking); // 변경 사항 저장
+            redisRankingService.updateRanking(userId, newScore); // Redis에도 점수 업데이트
             return true; // 업데이트 성공
         }
         return false; // 사용자 랭킹 없음
+    }
+
+    // 1시간마다 랭킹 점수 업데이트
+    @Scheduled(fixedRate = 14400000) // 4시간(7200초)마다 실행
+    public void updateAllRankings() {
+        List<Ranking> allRankings = rankingRepository.findAllByOrderByScoreDesc(); // 데이터베이스에서 랭킹 조회
+        for (Ranking ranking : allRankings) {
+            redisRankingService.updateRanking(ranking.getUser().getUserId(), ranking.getScore()); // Redis에 랭킹 업데이트
+        }
     }
 }
