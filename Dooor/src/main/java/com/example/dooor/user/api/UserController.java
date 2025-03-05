@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -208,5 +209,17 @@ public class UserController {
         else if (updated == 2) return ResponseEntity.status(403)
                 .body("변경할 수 있는 권한이 없습니다.");
         else return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/quest-id")
+    @Operation(summary = "유저 퀘스트 진행상황", description = "사용자의 퀘스트 진행도를 파악합니다.")
+    public ResponseEntity<Integer> getCurrentQuestId(Principal principal){
+        return ResponseEntity.ok(userService.getCurrentQuestId(principal));
+    }
+
+    @GetMapping("quest-cleared")
+    @Operation(summary = "유저 진행중 퀘스트 성공여부", description = "사용자가 진행중인 퀘스트의 성공 여부를 파악합니다.")
+    public ResponseEntity<Boolean> getCurrentQuestCleared(Principal principal){
+        return ResponseEntity.ok(userService.getCurrentQuestCleared(principal));
     }
 }

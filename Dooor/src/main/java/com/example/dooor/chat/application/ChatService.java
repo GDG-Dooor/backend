@@ -52,7 +52,7 @@ public class ChatService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         String userName = user.getName();
 
-        String jsonBody = "{\"user_id\":\"" + userName + "\", \"message\":\"" + chatRequestDTO.getMessage() + "\"}";
+        String jsonBody = "{\"user_id\":\"" + principal.getName() + "\", \"user_name\":\"" + user.getName() + "\",\"message\":\"" + chatRequestDTO.getMessage() + "\"}";
 //        String param = objectMapper.writeValueAsString(chatRequestDTO);
 //        String param = objectMapper.writeValueAsString(jsonBody);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -60,7 +60,7 @@ public class ChatService {
         HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
 //        HttpEntity<String> entity = new HttpEntity<>(param, headers);
 
-        String url = "https://ai-iyjk.onrender.com/chat";
+        String url = "http://43.202.174.46:5000/chat";
 
         return uniToKor(restTemplate.postForObject(url, entity, String.class));
     }
