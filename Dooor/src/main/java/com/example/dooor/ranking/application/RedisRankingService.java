@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
-public class RedisRankingService {
+@Component 
+public class RedisRankingService { // redis db 설정
 
     private final JedisPool jedisPool;
 
