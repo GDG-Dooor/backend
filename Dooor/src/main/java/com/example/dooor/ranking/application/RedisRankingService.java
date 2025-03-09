@@ -17,6 +17,7 @@ public class RedisRankingService { // redis db 설정
 
     public void updateRanking(Integer userId, Integer score) {
         try (Jedis jedis = jedisPool.getResource()) {
+            System.out.println("Updating ranking for userId: " + userId + " with score: " + score);
             jedis.zadd("rankings", score, userId.toString()); // 점수 추가
         }
     }

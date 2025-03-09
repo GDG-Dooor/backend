@@ -48,13 +48,13 @@ public class RankingController {
 
     // 랭킹 점수 업데이트
     @PostMapping("/update")
-    @Operation(summary = "랭킹 점수 업데이트", description = "사용자 ID와 새로운 점수를 이용해 랭킹 점수를 업데이트합니다.")
+    @Operation(summary = "랭킹 점수 업데이트", description = "사용자 ID를 이용해 랭킹 점수를 업데이트합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "랭킹 점수가 성공적으로 업데이트되었습니다."),
             @ApiResponse(responseCode = "404", description = "사용자 랭킹을 찾을 수 없습니다.")
     })
-    public ResponseEntity<Void> updateRankingScore(@RequestParam Integer userId, @RequestParam Integer newScore) {
-        boolean updated = rankingService.updateRankingScore(userId, newScore);
+    public ResponseEntity<Void> updateRankingScore(@RequestParam Integer userId) {
+        boolean updated = rankingService.updateRankingScore(userId, 10); // 10점을 추가
         return updated ? ResponseEntity.ok().build() // 점수 업데이트 성공
                 : ResponseEntity.notFound().build(); // 사용자 랭킹 없음
     }
