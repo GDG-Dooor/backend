@@ -1,6 +1,10 @@
 package com.example.dooor.quest.application;
 
 import com.example.dooor.quest.domain.Quest;
+import com.example.dooor.ranking.application.RankingService;
+import com.example.dooor.ranking.application.RedisRankingService;
+import com.example.dooor.ranking.domain.Ranking;
+import com.example.dooor.ranking.domain.repository.RankingRepository;
 import com.example.dooor.stage.domain.Stage;
 import com.example.dooor.service.AwsS3Service;
 import com.example.dooor.user.domain.User;
@@ -27,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -38,6 +43,9 @@ public class QuestService {
     private final UserRepository userRepository;
     private final AwsS3Service awsS3Service;
     private final ObjectMapper objectMapper;
+    private final RankingRepository rankingRepository;
+    private final RankingService rankingService;
+    private final RedisRankingService redisRankingService;
 
     public QuestRes mkQuest(QuestReq questReq) {
         // 새로운 퀘스트 생성
@@ -103,13 +111,39 @@ public class QuestService {
 
     // 퀘스트 완료 처리
     public boolean completeQuest(Integer userId, Integer questId) {
-        if(0 == 0) { // 조건 수정
-            User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-            user.updateQuest(questId, true);
-            userRepository.save(user);
-            return true;
+        // 퀘스트가 실제로 완료되었는지 확인하는 조건을 여기에 추가합니다.
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // 퀘스트 완료 로직
+        user.updateQuest(questId, true);
+        userRepository.save(user);
+
+        // 랭킹 업데이트
+        updateRanking(user); // 랭킹 업데이트 메서드 호출
+
+        // 레디스에 점수 업데이트
+        int addedScore = 10; // 고정 점수
+        redisRankingService.updateRanking(userId, addedScore); // 레디스에 점수 업데이트
+
+        return true; // 완료 처리 성공
+    }
+
+    private void updateRanking(User user) {
+        // 사용자 ID로 랭킹 정보 조회
+        Ranking ranking = rankingRepository.findByUser_UserId(user.getUserId());
+
+        if (ranking == null) {
+            // 사용자의 랭킹 정보가 없으면 새로 생성
+            ranking = new Ranking(user, 0, null); // 기본 점수 0으로 초기화
+            ranking.setRank(1); // 기본 랭킹 설정 (1위로 초기화)
+        } else {
+            // 기존의 랭킹 정보가 있으면 점수 증가
+            ranking.setScore(ranking.getScore() + 10); // 예: 10점 추가
         }
-        return false;
+
+        ranking.setUpdatedAt(LocalDateTime.now()); // 업데이트 시간 설정
+
+        rankingRepository.save(ranking); // 랭킹 정보 저장
     }
 
     public Boolean validateQuest(MultipartFile multipartFile, Principal principal) throws IOException, ParseException {
