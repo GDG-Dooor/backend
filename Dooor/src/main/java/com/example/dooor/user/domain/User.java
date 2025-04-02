@@ -36,8 +36,8 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-//    @Column(name = "`rank`", columnDefinition = "INT DEFAULT 0")
-//    private Integer rank = 0; // 랭킹 점수
+    @Column(name = "`rank`", columnDefinition = "INT DEFAULT 0")
+    private Integer rank = 0; // 랭킹 점수
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "current_grade_id")
