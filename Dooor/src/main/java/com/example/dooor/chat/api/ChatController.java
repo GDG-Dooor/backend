@@ -56,7 +56,7 @@ public class ChatController {
             @ApiResponse(responseCode = "200", description = "메시지를 성공적으로 가져왔습니다."),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
     })
-    public ResponseEntity<String> getMessage(@RequestBody ChatRequestDTO chatRequestDTO, Principal principal) throws JsonProcessingException {
+    public ResponseEntity<String> getMessage(ChatRequestDTO chatRequestDTO, Principal principal) throws JsonProcessingException {
         return ResponseEntity.ok(chatService.getMessage(chatRequestDTO, principal));
     }
 }

@@ -86,7 +86,7 @@ public class QuestController {
         return completed ? ResponseEntity.ok("true") : ResponseEntity.ok("false");
     }
 
-    @GetMapping("/validate")
+    @PostMapping("/validate")
     public ResponseEntity<Boolean> validateQuest(@RequestPart MultipartFile image, Principal principal) throws IOException, ParseException {
         return ResponseEntity.ok(questService.validateQuest(image, principal));
 //        return questService.validateQuest(image, principal);
