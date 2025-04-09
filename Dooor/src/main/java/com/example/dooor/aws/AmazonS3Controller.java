@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/file")
+@RequestMapping("/file") //계정변경 실험3
 public class AmazonS3Controller {
 
     private final AwsS3Service awsS3Service;
