@@ -60,7 +60,7 @@ public class ChatService {
         HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
 //        HttpEntity<String> entity = new HttpEntity<>(param, headers);
 
-        String url = "http://43.202.174.46:5000/chat";
+        String url = "http://3.39.97.107:5000/chat";
 
         return uniToKor(restTemplate.postForObject(url, entity, String.class));
     }
