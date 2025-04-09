@@ -51,7 +51,7 @@ public class ChatService {
         User user = userRepository.findById(Integer.parseInt(principal.getName()))
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         String userName = user.getName();
-
+        System.out.println(chatRequestDTO.getMessage());
         String jsonBody = "{\"user_id\":\"" + principal.getName() + "\", \"user_name\":\"" + user.getName() + "\",\"message\":\"" + chatRequestDTO.getMessage() + "\"}";
 //        String param = objectMapper.writeValueAsString(chatRequestDTO);
 //        String param = objectMapper.writeValueAsString(jsonBody);
