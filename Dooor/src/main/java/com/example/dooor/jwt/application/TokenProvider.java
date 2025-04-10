@@ -97,6 +97,8 @@ public class TokenProvider {
     public String resolveToken(HttpServletRequest request) { //토큰 분해/분석
         String bearerToken = request.getHeader(AUTHORIZATION);
 
+        System.out.println(bearerToken);
+        System.out.println(bearerToken.substring(7).trim());
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)) {
             return bearerToken.substring(7);
         }
